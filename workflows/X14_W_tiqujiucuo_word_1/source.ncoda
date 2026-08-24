@@ -1,0 +1,148 @@
+@language nodecoda/1
+// X14 提取视频文案、纠错后保存到飞书文档（抖音/小红书/mp4 三源）
+//
+// 原结构（X14_W_tiqujiucuo_word_1-draft.yaml）:
+//   start(api_key, folder_token, share_link)
+//     → code(154909: 判断链接类型 → judge_num_value / douyin_url)
+//     → condition(195392): judge_num_value == 1 ?   // 1=mp4/直链, 0=平台链接
+//         true → merge(141101: video_url 取第一个非空)
+//         false → parse_video(127211) → condition(111842): code == 0 ?
+//             true → merge(141101)
+//             false → extract_xhs_article_webinfo(158823) → merge(141101)
+//     → voice_to_text(129321: api_key, file_url=video_url) → data / error_message / errorBody
+//     → condition(129309): data not_empty ?
+//         false → merge(157423: error_message/error_code) → code(109623: 拼错误) 
+//             → text(139643: 文案提取失败...) → merge(167669) → throwError(186296)
+//         true → content_check(112182: api_key, user_prompt=data, model=gpt-4o) → output
+//             → condition(111877): 矫正输出非空 ?
+//                 false → text(179466: 文案矫正失败...) → merge(167669) → throwError
+//                 true → datetime(158963) → text(151907: W0004-{{dateTime}})
+//                     → create_document(142836: content, folder_token, title) → code, data.url
+//                     → condition(755643): code == 0 ? true → end({{url}})
+//                         false → text(617035: 创建失败...) → merge(167669) → throwError
+//
+// 重写说明:
+//   - code 154909（正则判断链接类型）用 foreign code 复刻，结构化输出 {judge_num_value, douyin_url}
+//   - merge 141101 语义：取第一个非空 [xhs.baseInfo.videoUrl, parse.data.video, share_link]；
+//     重写为分支求值（judge==1 直链；否则 parse 成功用 data.video，失败用 xhs videoUrl）
+//   - code 109623（`[error_code] error_message` 拼接）用 foreign code 复刻
+//   - 原 111877 冗余检查 voice_to_text.data（129309 已保证非空），按语义解读为
+//     检查 content_check 矫正输出非空（同 X22 族"文案矫正失败"分支）
+//   - end 节点静态文案 {{url}} = create_document.data.url
+
+@mode workflow
+@answer "{{url}}" url=created.data.url
+
+// resolve_video: 按链接类型解析视频地址（对应原 code 154909 → condition → merge 141101）
+import "coze-biz.copy_check";
+import "coze-biz.datetime";
+import "coze-biz.feishu_docs";
+import "coze-biz.throw_error";
+import "coze-biz.video_asr";
+import "coze-biz.video_parse";
+import "coze-biz.xhs_article_extract";
+function resolve_video(string api_key, string share_link, float judge_num_value) -> string {
+    if (judge_num_value == 1) {
+        // mp4/直链 → 直接用分享链接（原 merge 取 share_link）
+        return share_link;
+    }
+    // 平台链接 → 抖音解析优先（原 127211）
+    let v = video_parse.parse_video({
+        "api_key": api_key,
+        "share_link": share_link
+    });
+    if (v.status_code == 0) {
+        return v.data.video;
+    }
+    // 抖音解析失败 → 小红书提取（原 158823）
+    let xhs = xhs_article_extract.extract_xhs_article_webinfo({
+        "url": share_link
+    });
+    return xhs.baseInfo.videoUrl;
+}
+
+function main(string api_key, string folder_token, string share_link) {
+    // code 154909: 判断链接类型（mp4/expires= → 1；否则 0）
+    let judge = foreign code python3(string input = share_link) -> {
+        judge_num_value: float; douyin_url: string;
+    } {
+        source `import re
+
+def main(input: str) -> dict:
+    input_str = input
+    video_url = ""
+    patterns = [
+        r"https://v\.douyin\.com/[a-zA-Z0-9]+/?",
+        r"https://(?:www\.)?douyin\.com/video/\d+(?:\?[^\s?]*)?",
+        r"https://(?:www\.)?kuaishou\.com/short-video/[a-zA-Z0-9]+(?:\?[^\s?]*)?",
+        r"https://v\.kuaishou\.com/[a-zA-Z0-9]+/?",
+    ]
+    for pattern in patterns:
+        m = re.search(pattern, input_str)
+        if m:
+            video_url = m.group(0)
+            if "/video/" in video_url or "/short-video/" in video_url:
+                video_url = video_url.split("?")[0]
+            break
+    lower = input_str.lower()
+    judge_num = 1.0 if (".mp4" in lower or "expires=" in lower) else 0.0
+    return {"judge_num_value": judge_num, "douyin_url": video_url}`;
+    };
+
+    // 解析视频地址（merge 141101 语义）
+    let video_url = resolve_video(api_key, share_link, judge.judge_num_value);
+
+    // voice_to_text: 视频语音转文案（原 129321）
+    let asr = video_asr.voice_to_text({
+        "api_key": api_key,
+        "file_url": video_url
+    });
+
+    // 文案提取失败分支（原 129309 false → merge 157423 → code 109623 → text 139643）
+    if (asr.data == "") {
+        // merge 157423: error_message 透传（恒等，直接引用）
+        let em = asr.error_message;
+
+        // text 139643: 文案提取失败 → merge 167669 → throwError
+        let err = `文案提取失败，请联系客服微信: shuidi_tech
+
+错误信息：${em}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // content_check: 文案校对（原 112182, model=gpt-4o）
+    let checked = copy_check.content_check({
+        "api_key": api_key,
+        "user_prompt": asr.data,
+        "model": "gpt-4o"
+    });
+
+    // 矫正失败分支（原 111877 false → text 179466 → throwError）
+    if (checked.output_value == "") {
+        throw_error.throw_error({"error_message": ["文案矫正失败，请联系客服微信: shuidi_tech"]});
+    }
+
+    // datetime: 文档标题时间戳后缀（原 158963）
+    let now = datetime.datetime({});
+
+    // 构造文档标题（原 text 151907: `W0004-{{dateTime}}`）
+    let title = `W0004-${now.dateTime}`;
+
+    // create_document: 创建飞书文档（原 142836）
+    let created = feishu_docs.create_document({
+        "content": checked.output_value,
+        "folder_token": folder_token,
+        "title": title
+    });
+
+    // 创建失败分支（原 755643 false → text 617035 → throwError）
+    if (created.status_code != 0) {
+        let err = `飞书文档创建失败，请联系客服: shuidi_tech ；；；错误信息：[${created.status_code}] ${created.msg}`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // end: 返回文档链接（原 end content="{{url}}"）
+    return created.data.url;
+}

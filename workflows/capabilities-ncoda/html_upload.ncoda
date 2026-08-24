@@ -1,0 +1,12 @@
+// html_upload.ncoda — capability header (provider = file name)
+// desc: 发布网页
+@language nodecoda/1
+
+type HtmlUploadHtml2urlResult = {
+  string message;
+
+  string url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function html2url(string html) -> HtmlUploadHtml2urlResult {}

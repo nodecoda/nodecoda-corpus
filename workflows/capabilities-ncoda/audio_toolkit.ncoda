@@ -1,0 +1,20 @@
+// audio_toolkit.ncoda — capability header (provider = file name)
+// desc: 音频处理工具
+@language nodecoda/1
+
+type AudioToolkitMergeAudiosResult = {
+  AudioToolkitMergeAudiosData data;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type AudioToolkitMergeAudiosData = {
+  string url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function merge_audios(any format, any urls) -> AudioToolkitMergeAudiosResult {}

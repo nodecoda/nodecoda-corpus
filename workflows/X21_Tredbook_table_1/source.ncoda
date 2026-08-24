@@ -1,0 +1,148 @@
+@language nodecoda/1
+// X21 提取小红书视频笔记内容进行仿写和润色 → 存入飞书文档
+//
+// 原结构（X21_Tredbook_table_1-draft.yaml）:
+//   start(api_key, folder_token, share_link)
+//     → parse_video(132046) → code, data{cover,title,video}
+//     → condition(617565): code == 0 ?
+//         false(失败) → throwError(279783: "视频解析失败或该链接无视频")
+//         true(成功) → voice_to_text(163273: api_key, file_url=data.video) → data
+//             → content_check(111182: api_key, user_prompt=voice.data) → output
+//             → text(164432: 小红书风格系统提示词)
+//             → wujie(102197: api_key, model=claude-3-7-sonnet-20250219,
+//                     user_prompt=content_check.output, system_prompt=164432) → output
+//             → code(154895: JSON.parse → `## 标题\n\n{title}\n\n---\n\n## 内容\n\n{content}`，
+//                    解析失败回退原文)
+//     → datetime(158963) → dateTime → text(151907: `W0008-{{dateTime}}`)
+//     → create_document(142836: content=code154895.output, folder_token, title=151907) → data.url
+//     → end(output=data.url)
+//
+// 重写说明:
+//   - 与 X7 同构（边完全相同）；原 YAML 额外含一个孤立无限 loop 节点
+//     185591（无入边/出边，孤儿）→ 忽略
+//   - content_check 无 model 输入（能力头 model = "" 默认）
+//   - code 154895 的 JSON→Markdown 转换用 foreign code 复刻（含失败回退分支）
+//   - 保留原分支语义：解析失败直接抛错，不创建文档
+
+@mode workflow
+
+import "coze-biz.copy_check";
+import "coze-biz.datetime";
+import "coze-biz.feishu_docs";
+import "coze-biz.throw_error";
+import "coze-biz.video_asr";
+import "coze-biz.video_parse";
+import "coze-biz.wujie";
+const XHS_SYSTEM = `# 小红书风格短视频内容创作专家
+
+## 角色(Role):
+你是一位深谙小红书平台规则的内容创作专家，擅长将普通文案转化为充满"种草"感、亲和力和真实性的小红书风格笔记。你了解小红书用户的喜好，善于创造生动、情感化且极具分享性的内容。
+
+## 背景(Background):
+小红书作为国内领先的生活方式分享社区，其笔记风格独特而鲜明，特点是情感真挚、亲和力强、表达方式接地气，常带有强烈的个人体验感和推荐意愿。优质的小红书笔记往往通过标题吸引眼球，用生动具体的文字和emoji表情符号展现个人经历，并在分享中融入实用价值和情感共鸣。
+
+## 任务(Task):
+1. 将用户提供的原始文案转化为地道的小红书风格笔记，保留核心信息的同时，注入小红书特有的口吻和表达方式。
+2. 创建一个符合小红书平台特色的标题，吸引用户点击并阅读全文。
+3. 恰当地运用emoji表情符号，增强情感表达和视觉吸引力。
+
+## 输出格式(Output format):
+{
+    "title": "标题 #标签1 #标签2 #标签3",
+    "content": "润色后的文案（内容中的双引号需要转义为\\"）"
+}
+
+注意：
+1. 内容中的所有双引号(")必须转义为(\\")
+2. 内容中的所有反斜杠(\\)必须转义为(\\\\)
+3. 内容中的所有制表符必须转义为(\\t)
+4. 内容中的所有换行符必须转义为(\\n)
+5. 不要使用代码块包裹，确保最终输出的是有效的JSON格式，可以被JSON解析器正确解析
+
+## 写作原则(Writing Principles):
+1. **个人化叙述**：使用第一人称，以个人体验和感受为主线
+2. **真诚种草感**：表达自然的推荐欲，带有"不得不分享"的热情
+3. **口语化表达**：使用日常对话式语言，包含语气词和口头禅
+4. **具体而微**：提供具体细节和感受，避免空泛表达
+5. **情感丰富**：表现明显的情绪起伏，如惊喜、感动、震撼等
+6. **价值导向**：确保内容中包含实用信息或有启发性的观点
+7. **emoji点缀**：适量使用表情符号增强表达，但避免过度使用
+
+## 小红书特色表达方式:
+1. **感叹式开场**：如"天啊！终于找到了！"、"姐妹们看过来！"
+2. **亲密称谓**：如"姐妹们"、"宝子们"、"盆友们"
+3. **强调词**：频繁使用"真的"、"真心"、"实在是"等增强语气
+4. **小红书热词**：融入"yyds"、"绝绝子"、"skr"、"太可了"等流行语
+5. **问句互动**：如"有和我一样的吗？"、"你们想不想知道？"
+6. **分享感**：如"必须安利给大家"、"不分享简直对不起自己"
+7. **标记式总结**：如"收藏➕转发"、"学会了吗？"
+
+## 初始化(Initialization):
+准备好接收用户的原始文案，将直接输出一个充满小红书风格的内容（以JSON格式呈现，不使用代码块包裹，包含标题和正文），不会添加任何额外解释。`;
+
+type DocContent = {
+    string title;
+    string content;
+};
+
+function main(string api_key, string folder_token, string share_link) {
+    // parse_video: 解析小红书视频链接 → 标题/封面/视频地址
+    let v = video_parse.parse_video({
+        "api_key": api_key,
+        "share_link": share_link
+    });
+
+    // 失败分支: 视频解析失败或无视频 → 直接抛错（原 condition 617565 false → throwError 279783）
+    if (v.status_code != 0) {
+        throw_error.throw_error({"error_message": ["视频解析失败或该链接无视频"]});
+    }
+
+    // voice_to_text: 视频语音转文案
+    let asr = video_asr.voice_to_text({
+        "api_key": api_key,
+        "file_url": v.data.video
+    });
+
+    // content_check: 文案校对（原 111182; 无 model 输入，使用能力头默认值）
+    let checked = copy_check.content_check({
+        "api_key": api_key,
+        "user_prompt": asr.data
+    });
+
+    // 全球大模型: 小红书风格仿写润色（wujie, claude-3-7-sonnet）
+    let draft = wujie.wujie({
+        "api_key": api_key,
+        "model": "claude-3-7-sonnet-20250219",
+        "user_prompt": checked.output_value,
+        "system_prompt": XHS_SYSTEM
+    });
+
+    // json.parse<DocContent>: LLM 输出 JSON → Markdown（原生 type-59 反序列化节点；
+    // 解析失败 = 节点错误；原 try/except 回退原文的兜底在原生节点上不可表达，记录为 P3）
+    let doc = json.parse<DocContent>(draft.output_value);
+    let doc_content = `## 标题
+
+${doc.title}
+
+---
+
+## 内容
+
+${doc.content}`;
+
+    // datetime: 生成文档标题时间戳后缀
+    let now = datetime.datetime({});
+
+    // 构造文档标题（对应原 text 151907: `W0008-{{dateTime}}`）
+    let title = `W0008-${now.dateTime}`;
+
+    // create_document: 创建飞书文档（含润色后内容）
+    let created = feishu_docs.create_document({
+        "content": doc_content,
+        "folder_token": folder_token,
+        "title": title
+    });
+
+    // end: 返回文档链接（原 end output=data.url）
+    return created.data.url;
+}

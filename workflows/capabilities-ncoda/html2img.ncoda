@@ -1,0 +1,12 @@
+// html2img.ncoda — capability header (provider = file name)
+// desc: html2img
+@language nodecoda/1
+
+type Html2imgGenImgResult = {
+  string image_url;
+
+  string message;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function gen_img(int height = 0, string html, int width = 0) -> Html2imgGenImgResult {}

@@ -1,0 +1,79 @@
+// capcut_data.ncoda — capability header (provider = file name)
+// desc: 剪映小助手数据生成器
+@language nodecoda/1
+
+type CapcutDataAudioInfosResult = {
+  string infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function audio_infos(string audio_effect = "", any mp3_urls, any timelines, float volume = 0) -> CapcutDataAudioInfosResult {}
+type AudioTimelineItem = {
+  int start;
+  int end;
+};
+type CapcutDataAudioTimelinesResult = {
+  array<AudioTimelineItem> all_timelines;
+  array<AudioTimelineItem> timelines;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function audio_timelines(any links) -> CapcutDataAudioTimelinesResult {}
+type CapcutDataCaptionInfosResult = {
+  string infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function caption_infos(int font_size = 0, any in_animation = null, any in_animation_duration = 0, string keyword_color = "", int keyword_font_size = 0, any keywords = null, string loop_animation = "", int loop_animation_duration = 0, any out_animation = null, any out_animation_duration = 0, any texts, any timelines) -> CapcutDataCaptionInfosResult {}
+type CapcutDataImgsInfosResult = {
+  string infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function imgs_infos(any height = 1080, any imgs, any in_animation = null, int in_animation_duration = 0, string loop_animation = "", int loop_animation_duration = 0, string out_animation = "", int out_animation_duration = 0, any timelines, string transition = "", int transition_duration = 0, any width = 1920) -> CapcutDataImgsInfosResult {}
+type CapcutDataVideoInfosResult = {
+  string infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function video_infos(any timelines, any video_urls) -> CapcutDataVideoInfosResult {}
+type CapcutDataStrToListResult = {
+  array<string> infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function str_to_list(any obj) -> CapcutDataStrToListResult {}
+type CapcutDataGetUrlResult = {
+  array<any> outputList;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function get_url(string output_value) -> CapcutDataGetUrlResult {}
+type CapcutDataObjsToStrListResult = {
+  array<string> infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function objs_to_str_list(any outputs) -> CapcutDataObjsToStrListResult {}
+type CapcutDataEffectInfosResult = {
+  string infos;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function effect_infos(any effects, any timelines) -> CapcutDataEffectInfosResult {}
+type CapcutDataKeyframesInfosResult = {
+  CapcutDataKeyframesInfosErrorbody errorBody;
+
+  bool isSuccess;
+
+  string keyframes_infos;
+};
+
+type CapcutDataKeyframesInfosErrorbody = {
+  string errorCode;
+
+  string errorMessage;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function keyframes_infos(any ctype, any height = 1080, any offsets, any segment_infos, any values, any width = 1920) -> CapcutDataKeyframesInfosResult {}

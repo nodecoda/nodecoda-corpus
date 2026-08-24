@@ -1,0 +1,32 @@
+@language nodecoda/1
+// X1 无水印视频提取（抖音/小红书/B站/快手）— coze-reference 语义重写
+//
+// 原结构（X1_Wshipintiqu_url_1-draft.yaml）:
+//   start(share_links)
+//     → get_url(提取链接, content=share_links) → url
+//     → getvideodownload(视频下载, videolink=url) → data.videourl
+//     → end(output=data.videourl)
+//   另有 llm(hello)+code 悬空分支（→ end 但不被 end 引用，判定为死代码，省略）
+//
+// 重写说明:
+//   - 死代码分支（llm/code 测试节点）不进入 end 输出，省略
+//   - 注册表输出直接为顶层字段（url / videourl），无 data 前缀
+
+@mode workflow
+@answer "{{output}}" output=video.data.videourl
+
+import "coze-biz.url_get";
+import "coze-biz.video_download";
+function main(string share_links) {
+    // 提取分享链接中的视频链接（原 get_url 节点）
+    let links = url_get.get_url({
+        "content": share_links
+    });
+
+    // 下载无水印视频（原 getvideodownload 节点）
+    let video = video_download.getvideodownload({
+        "videolink": links.url
+    });
+
+    return video.data.videourl;
+}

@@ -1,0 +1,16 @@
+// string_to_array.ncoda — capability header (provider = file name)
+// desc: 字符串转数组
+@language nodecoda/1
+
+type StringToArrayString2ArrayResult = {
+  array<string> data;
+
+  string message;
+
+  string prompt;
+
+  int status_code;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function string_2_array(any content) -> StringToArrayString2ArrayResult {}

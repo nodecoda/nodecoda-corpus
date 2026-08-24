@@ -1,0 +1,16 @@
+// file_read.ncoda — capability header (provider = file name)
+// desc: 文件读取
+@language nodecoda/1
+
+type FileReadReadResult = {
+  string data;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function read(string url) -> FileReadReadResult {}

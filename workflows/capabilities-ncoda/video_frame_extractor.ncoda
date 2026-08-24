@@ -1,0 +1,12 @@
+// video_frame_extractor.ncoda — capability header (provider = file name)
+// desc: 视频抽帧（coze-biz 内置节点;count/interval/method + video 输入）
+// P1 内置节点通道: 绑定表 node_type=video_frame_extractor。输出 data.chunks
+// 列表（index / screenshot / timestamp_ms）。
+@language nodecoda/1
+
+type VideoFrameExtractResult = {
+  any data;
+};
+
+@capability failure_branch=true, timeout_ms=600000
+function extract(string video, int count, int interval_ms, string method) -> VideoFrameExtractResult {}

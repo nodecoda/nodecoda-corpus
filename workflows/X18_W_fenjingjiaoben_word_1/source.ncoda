@@ -1,0 +1,94 @@
+@language nodecoda/1
+// X18 根据文案内容生成分镜脚本 → 创建飞书文档并写入内容
+//
+// 原结构（X18_W_fenjingjiaoben_word_1-draft.yaml）:
+//   start(api_key, content, folder_token)
+//     → datetime(130595) → dateTime
+//     → text(151907: 文件名称 `W0016_{{dateTime}}`)
+//     → create_document(142836: folder_token, title=151907) → code, data{title,token,type,url}, msg
+//     → condition(199609): code == 0 ?
+//         false(失败) → text(617035: "飞书文档创建失败...{{code}} {{msg}}") → throwError(186296)
+//         true(成功) → text(180067: 分镜脚本系统提示词)
+//             → wujie(167214: api_key, model=claude-3-7-sonnet-20250219,
+//                     user_prompt=content, system_prompt=180067)
+//             → write_document(144768: content=wujie.output, document_id=data.token)
+//     → end(content="请打开飞书文档查看：{{url}}", url=data.url)
+//
+// 重写说明:
+//   - 保持原节点顺序与分支语义：先建文档（仅标题）→ 校验成功 → LLM 生成分镜 → 写入内容
+//   - text 617035 的 {{String1}}/{{String2}} 为 coze concat 占位符，
+//     对应 create_document 的 code/msg，用 foreign code 拼接错误消息
+//   - end 节点的静态文案（请打开飞书文档查看：{url}）作为返回值
+
+@mode workflow
+@answer "请打开飞书文档查看：{{url}}" url=created.data.url
+
+import "coze-biz.datetime";
+import "coze-biz.feishu_docs";
+import "coze-biz.throw_error";
+import "coze-biz.wujie";
+const STORYBOARD_SYSTEM = `你是一位专业的视频分镜脚本工程师，专注于为抖音平台打造爆款视频脚本。你的任务是将用户提供的文本内容转化为专业的分镜视频脚本，以表格形式呈现。
+
+你具备以下核心能力：
+1. 内容理解：精准把握主题、情节、角色和关键信息，理解视频整体风格和节奏
+2. 内容纠错：识别并修正所有错别字、同音字误用、形近字混淆和拼写错误
+3. 创意构思：基于文本构思出合适的时间、景别、画面内容、台词/旁白等元素
+4. 专业分镜：将内容转化为符合行业标准的分镜表格
+
+请直接以表格形式输出分镜脚本，包含以下6列：
+| 镜头号 | 景别 | 时长 | 镜头运动 | 画面内容 | 台词\旁白 |
+
+表格要求：
+- 镜头号：为每个镜头分配唯一编号
+- 景别：根据内容指定合适的景别（如近景、中景、远景、特写等）
+- 时长：为每个镜头设定合理时长（秒）
+- 镜头运动：描述镜头的运动方式（如推、拉、摇、移等）
+- 画面内容：详细描述每个镜头中的场景、人物和动作
+- 台词/旁白：添加相应的对白或旁白内容
+
+在创作过程中，请确保：
+- 保持原意：不改变内容的核心信息和完整性
+- 时长合理：确保各镜头时长设置符合视频整体节奏
+- 创意可行：所有构思必须切实可行，符合视频制作实际
+
+请仅输出完整分镜表格，不要包含任何其他解释、介绍或结语。`;
+
+function main(string api_key, string content, string folder_token) {
+    // datetime: 生成文件名时间戳后缀
+    let now = datetime.datetime({});
+
+    // 构造文档标题（对应原 text 151907: `W0016_{{dateTime}}`）
+    let title = `W0016-${now.dateTime}`;
+
+    // create_document: 创建飞书文档（仅标题，内容稍后写入）
+    let created = feishu_docs.create_document({
+        "folder_token": folder_token,
+        "title": title
+    });
+
+    // 失败分支: 创建失败 → 拼接错误消息并抛出（text 617035 → throwError 186296）
+    if (created.status_code != 0) {
+        let err = `飞书文档创建失败，请联系客服: shuidi_tech ；；；错误信息：[${created.status_code}] ${created.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // 成功分支: LLM 生成分镜脚本（wujie, claude-3-7-sonnet）
+    let script = wujie.wujie({
+        "api_key": api_key,
+        "model": "claude-3-7-sonnet-20250219",
+        "user_prompt": content,
+        "system_prompt": STORYBOARD_SYSTEM
+    });
+
+    // write_document: 将分镜脚本写入刚创建的文档
+    let written = feishu_docs.write_document({
+        "content": script.output_value,
+        "document_id": created.data.token
+    });
+
+    // end 节点静态文案: 返回文档链接（对应 end content="请打开飞书文档查看：{{url}}"）
+    let url = `请打开飞书文档查看：${created.data.url}`;
+
+    return url;
+}

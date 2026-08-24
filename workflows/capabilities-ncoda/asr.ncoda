@@ -1,0 +1,30 @@
+// asr.ncoda — capability header (provider = file name)
+// desc: 语音识别
+@language nodecoda/1
+
+type AsrAsrLiteResult = {
+  AsrAsrLiteData data;
+
+  AsrAsrLiteErrorbody errorBody;
+
+  bool isSuccess;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type AsrAsrLiteData = {
+  string text;
+};
+
+type AsrAsrLiteErrorbody = {
+  string errorCode;
+
+  string errorMessage;
+};
+
+@capability timeout_ms=180000
+function asr_lite(any audio_url, any language) -> AsrAsrLiteResult {}

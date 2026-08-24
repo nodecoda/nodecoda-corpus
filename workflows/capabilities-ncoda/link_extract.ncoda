@@ -1,0 +1,28 @@
+// link_extract.ncoda — capability header (provider = file name)
+// desc: 提取文本中链接
+@language nodecoda/1
+
+type LinkExtractExtractAllLinksResult = {
+  array<string> data;
+
+  string message;
+
+  string prompt;
+
+  int status_code;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function extract_all_links(any text) -> LinkExtractExtractAllLinksResult {}
+type LinkExtractExtractFirstLinkResult = {
+  string data;
+
+  string message;
+
+  string prompt;
+
+  int status_code;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function extract_first_link(any text) -> LinkExtractExtractFirstLinkResult {}

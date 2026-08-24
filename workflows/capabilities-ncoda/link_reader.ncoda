@@ -1,0 +1,32 @@
+// link_reader.ncoda — capability header (provider = file name)
+// desc: 链接读取
+@language nodecoda/1
+
+type LinkReaderLinkReaderPluginResult = {
+  LinkReaderLinkReaderPluginData data;
+
+  string err_msg;
+
+  string error_code;
+
+  string error_msg;
+
+  string message;
+
+  array<any> outputList;
+
+  string pdf_content;
+
+  int status_code;
+};
+
+type LinkReaderLinkReaderPluginData = {
+  string content;
+
+  array<any> images;
+
+  string title;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function link_reader_plugin(string prompt = "", bool skip_cache = false, string type_ = "", string url) -> LinkReaderLinkReaderPluginResult {}

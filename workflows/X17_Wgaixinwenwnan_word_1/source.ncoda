@@ -1,0 +1,61 @@
+@language nodecoda/1
+// X17 输入关键词 → 搜索热点新闻 → 抓取正文 → 全球大模型改写为口播文案
+//
+// 原结构（X17_Wgaixinwenwnan_word_1-draft.yaml）:
+//   start(api_key, keyword)
+//     → search(头条搜索, count=1, input_query=keyword) → data.doc_results
+//     → browse(url=doc_results[0].url) → data.content
+//     → text(157523: 拼接角色/改写规则系统提示词)
+//     → wujie(全球大模型, api_key, model=claude-3-7-sonnet-20250219,
+//             user_prompt=browse.data.content, system_prompt=text.output) → output
+//     → end(useAnswerContent)
+//
+// 重写说明 (E5-b):
+//   - doc_results 声明为 array<ToutiaoSearchDoc>（元素 record），
+//     doc_results[0].url 直接精确引用元素字段（item-0 元素访问，
+//     后端渲染为 output.data.doc_results.url），不再需要 foreign code 绕道
+
+@mode workflow
+@answer "{{output}}" output=draft.output_value
+
+import "coze-biz.toutiao_search";
+import "coze-biz.wujie";
+const REWRITE_SYSTEM = `# 角色：
+- 你是一个写了10年抖音口播爆款文案的博主，你深知改写别人的文案是最容易爆火的，所以你专门研究文案改写
+
+# 改写规则：
+- 需要先总结用户提供内容中的重点信息
+- 改写文案要遵从平台规则，尽量不要出现一些违规词
+- 请你时刻记住你的任务是生成抖音口播文案
+- 不要输出除内容之外的任何额外说明、解释或评论
+
+# 输出格式：
+这里输出你改写后的正文内容
+
+严格按照<改写规则>和<输出格式>帮用户改写，仅输出改写后的内容，不要有任何前言后语或额外说明。`;
+
+function main(string api_key = "", string keyword) {
+    // 搜索头条热点新闻（原 search 节点，count=1）
+    let results = toutiao_search.search({
+        "input_query": keyword,
+        "count": 1
+    });
+
+    // 取第一条结果的 url（元素 record 精确引用，item-0 元素访问）
+    let url = results.data.doc_results[0].url;
+
+    // 抓取新闻正文（原 browse 节点）
+    let page = toutiao_search.browse({
+        "url": url
+    });
+
+    // 全球大模型改写（原 wujie 插件节点）
+    let draft = wujie.wujie({
+        "api_key": api_key,
+        "model": "claude-3-7-sonnet-20250219",
+        "user_prompt": page.data.content,
+        "system_prompt": REWRITE_SYSTEM
+    });
+
+    return draft.output_value;
+}

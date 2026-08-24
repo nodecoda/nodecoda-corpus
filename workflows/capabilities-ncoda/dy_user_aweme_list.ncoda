@@ -1,0 +1,40 @@
+// dy_user_aweme_list.ncoda — capability header (provider = file name)
+// desc: 获取博主作品列表
+@language nodecoda/1
+
+type DyUserAwemeListAweme = {
+  string aweme_url;
+
+  int collect_count;
+
+  int comment_count;
+
+  int create_time;
+
+  string desc;
+
+  int digg_count;
+
+  int duration;
+
+  int share_count;
+
+  string video;
+};
+
+type DyUserAwemeListDyGetUserAwemeListResult = {
+  DyUserAwemeListDyGetUserAwemeListData data;
+
+  string message;
+
+  string prompt;
+
+  int status_code;
+};
+
+type DyUserAwemeListDyGetUserAwemeListData = {
+  array<DyUserAwemeListAweme> aweme_list;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function dy_get_user_aweme_list(any api_key, any share_link) -> DyUserAwemeListDyGetUserAwemeListResult {}

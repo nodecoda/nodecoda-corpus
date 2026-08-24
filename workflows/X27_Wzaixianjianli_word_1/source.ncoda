@@ -1,0 +1,69 @@
+@language nodecoda/1
+// X27 读取链接内容 → 大模型生成 HTML 简历 → 发布网页 + 生成图片 — coze-reference 语义重写
+//
+// 原结构（X27_Wzaixianjianli_word_1-draft.yaml）:
+//   start(files, prompt)
+//     → LinkReaderPlugin(链接读取, url=item1) → outputList / data
+//     → llm(DeepSeek-V3, temp=0.8, maxTokens=16384,
+//           prompt="图片信息：{{outputList}}\n用户输入：{{input}}\n...简历HTML...")
+//     → code(112767, input=llm.html, output=html)
+//     → html2url(上传html, html=code.html) → url     （分支1）
+//     → gen_img(html2img, html=code.html) → image_url（分支2）
+//     → end(image_url, url)
+//
+// 重写说明:
+//   - LinkReaderPlugin 的 url 输入自引用（item1 ← 187251，导出异常）→ 取 files
+//     （coze flow target 不支持 array 输入 → files 收 string 单链接，语义简化）
+//   - 提示词中的 outputList（array<any>）用 data.content（网页文本）替代——数组元素字段
+//     不可达（E5），文本内容对简历生成语义等价
+//   - code 112767 为模板清理（导出无实质代码）→ 用 strip 等价表达
+//   - 双分支并行 → 表达式级 parallel；end 返回两个值 → 命名 record
+
+@mode workflow
+
+import "coze-biz.html2img";
+import "coze-biz.html_upload";
+import "coze-biz.link_reader";
+type X27Result = {
+  string url;
+  string image_url;
+};
+
+function main(string files, string prompt = "") -> X27Result {
+    // 链接读取（原 LinkReaderPlugin 节点）
+    let page = link_reader.link_reader_plugin({
+        "url": files
+    });
+
+    // 大模型生成 HTML 简历（原 llm 节点）
+    let html = llm("DeepSeek-V3", {
+        "temperature": 0.8,
+        "max_tokens": 16384,
+        "timeout_ms": 600000,
+        "messages": [ {
+            "role": "user",
+            "content": "图片信息：" + page.data.content + "\n用户输入：" + prompt +
+                       "\n根据以下信息生成一份专业的HTML简历。请直接返回完整的HTML文件内容，不要包含markdown代码块或任何其他格式："
+        } ]
+    });
+
+    // HTML 清理（原 code 112767；模板代码，等价 strip）
+    let cleaned = trim(html.text);
+
+    // 并行发布：上传 html → url；html2img → image_url
+    // （v4 语义：parallel 是纯控制流语句，分支变量透明透出）
+    parallel {
+        u: {
+            let p = html_upload.html2url({
+                "html": cleaned
+            });
+        }
+        i: {
+            let g = html2img.gen_img({
+                "html": cleaned
+            });
+        }
+    };
+
+    return { "url": p.url, "image_url": g.image_url };
+}

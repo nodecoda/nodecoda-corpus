@@ -1,0 +1,125 @@
+@language nodecoda/1
+// X2 主页分享链接 → 解析账号视频列表 → 批量提取文案改写 → 写入飞书表格
+//
+// 原结构（X2_W05_douyinweidu_word_-draft.yaml）:
+//   start(fieshutoken, input=主页分享链接)
+//     → get_url(提取链接, content=input) → url
+//     → homepagegetData(主页分析, homelink=url, max_cursor="20")
+//         → data.aweme_list（视频列表）
+//     → batch(109341, batchSize=100, concurrentSize=5) 输入 aweme_list:
+//         每元素:
+//           getvideodownload(163260, videolink=aweme.awemeLink) → data.videourl
+//           → condition(167531: data.videourl 非空?)
+//               true → video2mp3(188243, video_url=videourl) → audio_url
+//                   → asr_lite(109674, audio_url, language=普通话) → data.text
+//                   → llm 文案改写(151398, content=text) → aicontent
+//                   → llm 标题文案分析(188531, title=aweme.title, content=text)
+//                       → titleAnalyze / contentAnalyze
+//                   → code 组合飞书数据(1928762, 6 字段) → reuslt
+//                   → add_records(127187, app_token=fieshutoken, records=reuslt)
+//               false → 跳过该元素
+//     → end(output=fieshutoken)
+//
+// 重写说明:
+//   - batch concurrentSize=5 → parallel for（batch 容器语义对齐）
+//   - condition videourl 非空 → if (video.data.videourl != "")，false 分支
+//     结束当前元素（原 167531 false → batch 内联输入）
+//   - code 1928762（6 字段组合）→ record 字面量 + json.stringify（同 X4 族模式）
+//   - llm 输出端口 aicontent / titleAnalyze / contentAnalyze 直接取字段
+//   - end 返回 fieshutoken（模板链接常量），非解析结果
+
+@mode workflow
+
+import "coze-biz.homepage_analyzer";
+import "coze-biz.url_get";
+import "coze-biz.video_download";
+import "coze-biz.video2audio";
+import "coze-biz.asr";
+import "coze-biz.feishu_bitable";
+
+// 标题文案分析 JSON 输出结构（原 llm 188531 的 titleAnalyze/contentAnalyze 端口）
+type AnalyzeResult = {
+  string titleAnalyze;
+  string contentAnalyze;
+};
+
+function main(string fieshutoken, string input = "") {
+    // 提取主页链接（原 get_url 节点）
+    let links = url_get.get_url({
+        "content": input
+    });
+
+    // 主页分析：取视频列表（原 homepagegetData 节点）
+    let profile = homepage_analyzer.homepage_get_data({
+        "homelink": links.url,
+        "max_cursor": 20
+    });
+
+    // 批量提取文案改写（batch 109341: concurrentSize=5）: 对每个作品下载→转写→改写→入表
+    parallel for (aweme in profile.data.aweme_list, concurrency: 5, on_error: terminate) {
+        // 下载无水印视频（原 getvideodownload 163260）
+        let video = video_download.getvideodownload({
+            "videolink": aweme.awemeLink
+        });
+
+        // 条件分支（原 condition 167531: videourl 非空才继续）
+        if (video.data.videourl != "") {
+            // 提取音频（原 video2mp3 188243）
+            let mp3 = video2audio.video2mp3({
+                "video_url": video.data.videourl
+            });
+
+            // 语音识别（原 asr_lite 109674，language=普通话）
+            let speech = asr.asr_lite({
+                "audio_url": mp3.audio_url,
+                "language": "普通话"
+            });
+
+            // 文案改写（原 llm 151398，DeepSeek-V3，输出 aicontent）
+            let rewritten = llm("DeepSeek-V3", {
+                "temperature": 0.8,
+                "max_tokens": 1024,
+                "timeout_ms": 180000,
+                "messages": [
+                    { "role": "system", "content": "# 角色\n你是一个专业的文案改写助手，擅长在不改变文案大意的前提下，对输入文案进行优化改写，使文案更加流畅、生动、具有可读性。\n\n## 技能\n### 技能 1: 改写文案\n1. 当用户提供需要改写的文案时，仔细分析文案内容，把握核心大意。\n2. 运用丰富的语言表达技巧和词汇储备，对文案进行逐句改写，确保意思不变。\n3.文案要符合黄金3s原则，开头提出核心主张，之后或者叙事或者强关联来写文案\n4. 输出改写后的文案。\n\n## 限制:\n- 只专注于文案改写任务，拒绝回答与文案改写无关的话题。\n- 输出内容必须是改写后的文案，不得偏离任务要求。\n- 改写后的文案需保持原意，不得改变核心观点和关键信息。" },
+                    { "role": "user", "content": `输入文案${speech.data.text}` }
+                ]
+            });
+
+            // 标题文案分析（原 llm 188531，DeepSeek-V3，responseFormat=2 JSON 模式
+            // 输出 titleAnalyze/contentAnalyze 两端口 → llm 输出 JSON 文本 + json.parse 解构）
+            let analyzed = llm("DeepSeek-V3", {
+                "temperature": 0.8,
+                "max_tokens": 1024,
+                "timeout_ms": 180000,
+                "messages": [
+                    { "role": "system", "content": "# 角色\n你是一个专业的短视频文案标题分析助手，擅长对短视频标题的选题以及视频文案进行深入剖析。\n\n## 技能\n### 技能 1: 分析标题选题\n1. 当接收到短视频标题时，对标题的选题角度、独特性等方面进行分析拆解。\n\n### 技能 2: 分析视频文案\n1. 当接收到视频文案时，详细拆解输出开头黄金 3s 的内容，说明其吸引人的方式。\n2. 阐述后面文案具体说了什么，以及整体结构如何。\n\n## 限制:\n- 只专注于短视频标题选题与文案分析任务。\n- 输出必须为 JSON 格式：{\"titleAnalyze\": \"<标题分析>\", \"contentAnalyze\": \"<文案分析>\"}，且只输出 JSON。" },
+                    { "role": "user", "content": `短视频标题${aweme.title}\n视频文案${speech.data.text}` }
+                ]
+            });
+            let analysis = json.parse<AnalyzeResult>(analyzed.text);
+
+            // 组合飞书数据（原 code 1928762，6 字段 records）
+            let record = {
+                "fields": {
+                    "视频标题": aweme.title,
+                    "视频链接": aweme.awemeLink,
+                    "视频文案": speech.data.text,
+                    "改写后文案": rewritten.text,
+                    "标题分析": analysis.titleAnalyze,
+                    "文案分析": analysis.contentAnalyze
+                }
+            };
+            let payload = json.stringify(record);
+            let rec = [ { "fields": payload } ];
+
+            // 写入飞书表格（原 add_records 127187）
+            let added = feishu_bitable.add_records({
+                "app_token": fieshutoken,
+                "records": rec
+            });
+        }
+    }
+
+    return fieshutoken;
+}

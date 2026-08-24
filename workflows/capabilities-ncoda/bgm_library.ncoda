@@ -1,0 +1,14 @@
+// bgm_library.ncoda — capability header (provider = file name)
+// desc: 背景音乐库
+@language nodecoda/1
+
+type BgmLibrarySearchBgmResult = {
+  array<any> data;
+
+  bool is_success;
+
+  string message;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function search_bgm(string keyword) -> BgmLibrarySearchBgmResult {}

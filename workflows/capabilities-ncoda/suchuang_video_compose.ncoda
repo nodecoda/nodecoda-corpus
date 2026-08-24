@@ -1,0 +1,16 @@
+// suchuang_video_compose.ncoda — capability header (provider = file name)
+// desc: 视频合成_速创小助手
+@language nodecoda/1
+
+type SuchuangVideoComposeAudioTimelinesResult = {
+  array<any> all_timelines;
+
+  string error;
+
+  array<string> links;
+
+  array<any> timelines;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function audio_timelines(any links) -> SuchuangVideoComposeAudioTimelinesResult {}

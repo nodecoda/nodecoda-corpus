@@ -1,0 +1,10 @@
+// copy_check.ncoda — capability header (provider = file name)
+// desc: 文案校对
+@language nodecoda/1
+
+type CopyCheckContentCheckResult = {
+  string output_value;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function content_check(any api_key, any user_prompt, any model = "") -> CopyCheckContentCheckResult {}

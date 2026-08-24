@@ -1,0 +1,121 @@
+@language nodecoda/1
+// X20 批量提取小红书视频文案和详情描述 → 写入飞书多维表格 — coze-reference 语义重写
+//
+// 原结构（X20_Tred2_table_1-draft.yaml）:
+//   start(api_key, app_token, is_text_corr_on, share_links)
+//     → datetime → code(152653: table_name=`W0003-${dateTime}` + fields[链接/标题/视频文案])
+//     → create_table(app_token, name) → condition code=0 ?
+//         失败 → text(617035) → throwError
+//         成功 → String2Array(share_links) → data(array<string>)
+//     → batch(170020, batchSize=100, concurrentSize=1, 每元素=分享链接):
+//         parse_video(share_link) → condition code=0 ?
+//           false(失败) → 错误文案(text 121207) → 汇入 merge（仍入表）
+//           true → voice_to_text(data.video) → data(文案)
+//             → condition data 非空 AND is_text_corr_on ?
+//               true → content_check(文案) → output(空则"文案矫正失败")
+//               true_1(仅非空) → 直接采用
+//               false(空) → 错误文案(text 139643; content 为空)
+//         → code(289556: records=[{链接, 标题, 视频文案}])
+//         → add_records → condition code=0 ? 继续 : text(728616) → throwError
+//     → end(静态文本)
+//
+// 重写说明:
+//   - batch concurrentSize=1 → parallel for（batch 容器语义对齐）
+//   - add_records 抽为辅助函数（内联）；解析失败仍入表（链接 + 空字段）
+//   - code 152653 的 fields 定义省略
+
+@mode workflow
+@answer "结果输出到了填入的多维表格中，表格左侧会增加一个数据表，点进去查看"
+
+// add_record: 构造 records 并追加到表格（对应原 batch 内 code 289556 → add_records → 失败检查）
+import "coze-biz.copy_check";
+import "coze-biz.datetime";
+import "coze-biz.feishu_bitable";
+import "coze-biz.string_to_array";
+import "coze-biz.throw_error";
+import "coze-biz.video_asr";
+import "coze-biz.video_parse";
+function add_record(string app_token, string table_id, string? link, string? title, string? content) {
+    // G8 声明式改写（替代 json.dumps foreign code）:
+    // coalesce 默认值 → record 构造 shim；json.stringify → coze 原生 type-58
+    // 序列化节点（dify 保持 code）；[{"fields": payload}] → fields 包装 shim。
+    let record = { "链接": coalesce(link, ""), "标题": coalesce(title, ""), "视频文案": coalesce(content, "") };
+    let payload = json.stringify(record);
+    let rec = [ { "fields": payload } ];
+
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": rec,
+        "table_id": table_id
+    });
+
+    // 失败检查（原 condition 755643 → text 728616 → throwError）
+    if (added.status_code != 0) {
+        let err = `多维表格数据表中添加数据失败，请联系客服: shuidi_tech ；；；错误信息：[${added.status_code}] ${added.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+}
+
+function main(string api_key, string app_token, bool is_text_corr_on, string share_links) {
+    // datetime: 表名后缀（W0003-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 构造表名（对应原 code 152653; 原 3 字段定义省略）
+    let table_name = `W0003-${now.dateTime}`;
+
+    // create_table: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支: 创建失败 → 拼接错误消息并抛出（text 617035 → throwError）
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败 ；；；错误信息：[${created.status_code}] ${created.msg}；；；请联系客服: shuidi_tech`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // 成功分支: 分享链接文本 → 链接数组
+    let links = string_to_array.string_2_array({"content": share_links});
+
+    // 批量处理（batch 170020: concurrentSize=1）: 对每个链接 解析视频 → 提取文案（+可选校对）→ 写入表格
+    parallel for (link in links.data, concurrency: 1, on_error: terminate) {
+        // parse_video: 解析视频（小红书链接）→ 标题/封面/视频地址
+        let v = video_parse.parse_video({
+            "api_key": api_key,
+            "share_link": link
+        });
+
+        if (v.status_code == 0) {
+            // voice_to_text: 视频语音转文案（原 115986 成功分支）
+            let asr = video_asr.voice_to_text({
+                "api_key": api_key,
+                "file_url": v.data.video
+            });
+
+            if (asr.data != "" && is_text_corr_on) {
+                // content_check: 文案校对（原 110449 双条件分支 + 174554）
+                let checked = copy_check.content_check({
+                    "api_key": api_key,
+                    "user_prompt": asr.data,
+                    "model": "gpt-4o-mini"
+                });
+                // 校对输出为空 → 原 text(文案矫正失败) 占位
+                add_record(app_token, created.data.table_id, link, v.data.title,
+                    checked.output_value != "" ? checked.output_value : "文案矫正失败，请联系客服微信: shuidi_tech");
+            } else {
+                // 文案为空（asr 无结果）→ 空内容仍入表（原 false 分支 → merge）
+                add_record(app_token, created.data.table_id, link, v.data.title,
+                    asr.data != "" ? asr.data : "");
+            }
+        } else {
+            // 解析失败仍入表（原 115986 false 分支 → merge → add_records），字段为空
+            add_record(app_token, created.data.table_id, link, "", "");
+        }
+    }
+
+    // end 静态文案
+    return "结果输出到了填入的多维表格中，表格左侧会增加一个数据表，点进去查看";
+}

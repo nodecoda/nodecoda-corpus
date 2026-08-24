@@ -1,0 +1,22 @@
+// ocr_volcano.ncoda — capability header (provider = file name)
+// desc: OCR火山版
+@language nodecoda/1
+
+type OcrVolcanoGeneralOcrResult = {
+  OcrVolcanoGeneralOcrData data;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type OcrVolcanoGeneralOcrData = {
+  array<any> line_rects;
+
+  array<string> line_texts;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function general_ocr(any url) -> OcrVolcanoGeneralOcrResult {}

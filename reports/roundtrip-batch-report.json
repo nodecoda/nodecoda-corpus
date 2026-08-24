@@ -1,0 +1,8289 @@
+{
+ "target": "coze-biz-1.0",
+ "examples_total": 27,
+ "summary": {
+  "DATAFLOW-EQ": 1,
+  "OP-SET-EQ": 3,
+  "BENIGN-DIFF": 5,
+  "DIFF": 18
+ },
+ "rows": [
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 3,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 3,
+     "variable-merge": 1
+    },
+    "edges": {
+     "code->plugin": 1,
+     "if->end": 1,
+     "if->plugin": 2,
+     "if->text-process": 3,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 3,
+     "start->plugin": 1,
+     "text-process->variable-merge": 3,
+     "variable-merge->plugin": 1
+    },
+    "edge_count": 17
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 4,
+     "end": 1,
+     "if": 3,
+     "loop": 1,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 3,
+     "variable-merge": 1
+    },
+    "edges": {
+     "code->if": 1,
+     "code->plugin": 2,
+     "code->variable-merge": 1,
+     "if->code": 1,
+     "if->plugin": 3,
+     "if->text-process": 2,
+     "loop->plugin": 1,
+     "plugin->code": 1,
+     "plugin->end": 3,
+     "plugin->if": 2,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 2,
+     "text-process->loop": 1,
+     "variable-merge->end": 1
+    },
+    "edge_count": 23
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "loop": [
+     {
+      "keys": [
+       "loopCount",
+       "loopType",
+       "node_inputs",
+       "variableParameters"
+      ],
+      "values": [
+       [
+        "loopType",
+        "array"
+       ]
+      ]
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('if',)": 3,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'douyin_keyword')": 1,
+    "('text', 'concat')": 3
+   },
+   "gen_l3": {
+    "('plugin', 'douyin_keyword')": 1,
+    "('if',)": 3,
+    "('plugin', 'throwError')": 3,
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 3,
+    "('loop', 'array')": 1,
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'add_records')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('if',), ())": 3,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('plugin', 'douyin_keyword'), (('literal',), ('literal',), ('start',), ('start',), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'douyin_keyword'), (('literal',), ('literal',), ('start',), ('start',), ('start',)))": 1,
+    "(('if',), ())": 3,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('loop', 'array'), (('plugin', 'douyin_keyword'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 2,
+    "(('plugin', 'add_records'), (('loop', 'array'), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1
+   },
+   "workflow": "X11_Tdouyin2_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X11_Tdouyin2_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "douyin_keyword",
+    "throw_error"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "douyin_keyword",
+    "throw_error"
+   ],
+   "causes": [
+    "code-node-count",
+    "loop-form",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 10
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('if',)": 5,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('text', 'concat')": 5,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'String2Array')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 7,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 8,
+    "('plugin', 'throwError')": 4,
+    "('plugin', 'String2Array')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 3
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('if',), ())": 5,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 8,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 4,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 2,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 3,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 3
+   },
+   "workflow": "X12_Tdouyin4_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X12_Tdouyin4_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "have_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "loop": 1,
+     "plugin": 1,
+     "start": 1
+    },
+    "edges": {
+     "code->end": 1,
+     "loop->code": 1,
+     "plugin->loop": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 4
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 2,
+     "end": 1,
+     "loop": 1,
+     "plugin": 1,
+     "start": 1
+    },
+    "edges": {
+     "code->end": 1,
+     "code->loop": 1,
+     "loop->code": 1,
+     "plugin->code": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 5
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "loop": [
+     {
+      "keys": [
+       "loopCount",
+       "loopType",
+       "variableParameters"
+      ],
+      "values": [
+       [
+        "loopType",
+        "infinite"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "loop": [
+     {
+      "keys": [
+       "loopCount",
+       "loopType",
+       "node_inputs",
+       "variableParameters"
+      ],
+      "values": [
+       [
+        "loopType",
+        "array"
+       ]
+      ]
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('loop', 'infinite')": 1,
+    "('if',)": 1,
+    "('continue',)": 1,
+    "('break',)": 1,
+    "('plugin', 'inspect_video_creation_status')": 1,
+    "('plugin', 'create_lipsync_video')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'create_lipsync_video')": 1,
+    "('loop', 'array')": 1,
+    "('plugin', 'inspect_video_creation_status')": 1,
+    "('if',)": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('loop', 'infinite'), ())": 1,
+    "(('if',), ())": 1,
+    "(('continue',), ())": 1,
+    "(('break',), ())": 1,
+    "(('plugin', 'inspect_video_creation_status'), (('plugin', 'create_lipsync_video'), ('start',)))": 1,
+    "(('plugin', 'create_lipsync_video'), (('start',), ('start',), ('start',), ('start',)))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'create_lipsync_video'), (('start',), ('start',), ('start',), ('start',)))": 1,
+    "(('loop', 'array'), (('code',),))": 1,
+    "(('plugin', 'inspect_video_creation_status'), (('plugin', 'create_lipsync_video'), ('start',)))": 1,
+    "(('if',), ())": 1
+   },
+   "workflow": "X13_Sshuzire_genghuan_shuziren_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X13_Sshuzire_genghuan_shuziren_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "create_lipsync_video",
+    "inspect_video_creation_status"
+   ],
+   "have_ops": [
+    "create_lipsync_video",
+    "inspect_video_creation_status"
+   ],
+   "causes": [
+    "code-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 2,
+     "end": 1,
+     "if": 5,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 4,
+     "variable-merge": 3
+    },
+    "edges": {
+     "code->if": 1,
+     "code->text-process": 1,
+     "if->end": 1,
+     "if->plugin": 4,
+     "if->text-process": 2,
+     "if->variable-merge": 3,
+     "plugin->end": 1,
+     "plugin->if": 4,
+     "plugin->text-process": 1,
+     "plugin->variable-merge": 1,
+     "start->code": 1,
+     "text-process->plugin": 1,
+     "text-process->variable-merge": 3,
+     "variable-merge->code": 1,
+     "variable-merge->plugin": 2
+    },
+    "edge_count": 27
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 3,
+     "end": 1,
+     "if": 5,
+     "plugin": 9,
+     "start": 1,
+     "text-process": 5,
+     "variable-merge": 1
+    },
+    "edges": {
+     "code->if": 1,
+     "code->plugin": 2,
+     "if->plugin": 5,
+     "if->text-process": 4,
+     "if->variable-merge": 1,
+     "plugin->end": 3,
+     "plugin->if": 4,
+     "plugin->plugin": 1,
+     "plugin->text-process": 1,
+     "start->code": 1,
+     "text-process->code": 2,
+     "text-process->plugin": 3,
+     "variable-merge->end": 1
+    },
+    "edge_count": 29
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips",
+       "updateTime"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('if',)": 5,
+    "('plugin', 'extract_xhs_article_webinfo')": 1,
+    "('plugin', 'create_document')": 1,
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 4,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'content_check')": 1
+   },
+   "gen_l3": {
+    "('if',)": 5,
+    "('text', 'concat')": 5,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'extract_xhs_article_webinfo')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'throwError')": 3,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'create_document')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('if',), ())": 5,
+    "(('plugin', 'extract_xhs_article_webinfo'), (('start',),))": 1,
+    "(('plugin', 'create_document'), (('plugin', 'content_check'), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('start',), ('variable-merge',)))": 1,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'), ('plugin', 'create_document')))": 1
+   },
+   "gen_l4": {
+    "(('if',), ())": 5,
+    "(('text', 'concat'), (('start',),))": 1,
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'parse_video'),))": 1,
+    "(('plugin', 'extract_xhs_article_webinfo'), (('start',),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'extract_xhs_article_webinfo'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'voice_to_text'),))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 2,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_document'), (('plugin', 'content_check'), ('start',), ('text', 'concat')))": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'), ('plugin', 'create_document')))": 1
+   },
+   "workflow": "X14_W_tiqujiucuo_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X14_W_tiqujiucuo_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "extract_xhs_article_webinfo",
+    "parse_video",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "have_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "extract_xhs_article_webinfo",
+    "parse_video",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count",
+    "variable-merge-count",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 2,
+     "code": 4,
+     "end": 1,
+     "if": 1,
+     "plugin": 3,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->code": 2,
+     "code->batch": 2,
+     "code->end": 1,
+     "code->plugin": 1,
+     "if->code": 1,
+     "if->text-process": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 13
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 2,
+     "code": 5,
+     "end": 1,
+     "if": 1,
+     "plugin": 3,
+     "start": 1,
+     "text-process": 4
+    },
+    "edges": {
+     "batch->code": 1,
+     "batch->text-process": 1,
+     "code->batch": 2,
+     "code->plugin": 1,
+     "code->text-process": 2,
+     "if->code": 2,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 2,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 17
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "method",
+       "node_inputs",
+       "splitParams"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('batch',)": 2,
+    "('text', 'concat')": 4,
+    "('plugin', 'wujie')": 3,
+    "('plugin', 'speech_synthesis')": 1,
+    "('plugin', 'add_records')": 1,
+    "('if',)": 2,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'create_table')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 6,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 2,
+    "('plugin', 'throwError')": 2,
+    "('batch',)": 2,
+    "('plugin', 'wujie')": 3,
+    "('plugin', 'speech_synthesis')": 1,
+    "('plugin', 'add_records')": 1,
+    "('text', 'split')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('batch',), (('code',),))": 2,
+    "(('text', 'concat'), (('batch',),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'speech_synthesis'), (('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('if',), ())": 2,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('text', 'concat'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 2,
+    "(('text', 'concat'), (('code',), ('plugin', 'create_table')))": 2,
+    "(('plugin', 'throwError'), (('code',),))": 2,
+    "(('batch',), (('code',),))": 2,
+    "(('text', 'concat'), (('batch',), ('batch',), ('batch',), ('batch',), ('start',), ('start',), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('text', 'concat'), (('batch',),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'speech_synthesis'), (('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',), ('plugin', 'add_records')))": 1,
+    "(('text', 'split'), (('start',),))": 1
+   },
+   "workflow": "X15_Vtuiwen_video_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X15_Vtuiwen_video_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "speech_synthesis",
+    "throw_error",
+    "wujie"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "speech_synthesis",
+    "throw_error",
+    "wujie"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 3,
+     "end": 1,
+     "if": 2,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 2,
+     "variable-merge": 1
+    },
+    "edges": {
+     "batch->code": 1,
+     "code->end": 1,
+     "code->plugin": 2,
+     "if->code": 1,
+     "if->plugin": 1,
+     "if->text-process": 2,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 2,
+     "start->plugin": 1,
+     "text-process->variable-merge": 2,
+     "variable-merge->plugin": 1
+    },
+    "edge_count": 17
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 2,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 4
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "code->text-process": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 2,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 14
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "method",
+       "node_inputs",
+       "splitParams"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'get_notes')": 1,
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'throwError')": 1,
+    "('if',)": 2,
+    "('text', 'concat')": 2,
+    "('plugin', 'add_records')": 1,
+    "('batch',)": 1,
+    "('plugin', 'general_ocr')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 4,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 2,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'get_notes')": 1,
+    "('batch',)": 1,
+    "('plugin', 'general_ocr')": 1,
+    "('plugin', 'add_records')": 1,
+    "('text', 'split')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'get_notes'), (('start',),))": 1,
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('if',), ())": 2,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('batch',), (('plugin', 'get_notes'),))": 1,
+    "(('plugin', 'general_ocr'), (('batch',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 2,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 2,
+    "(('plugin', 'get_notes'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'get_notes'),))": 1,
+    "(('plugin', 'general_ocr'), (('batch',),))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('text', 'split'), (('start',),))": 1,
+    "(('text', 'concat'), (('code',), ('plugin', 'create_table')))": 1
+   },
+   "workflow": "X16_W_tiquwenzi_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X16_W_tiquwenzi_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "general_ocr",
+    "get_notes",
+    "throw_error"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "general_ocr",
+    "get_notes",
+    "throw_error"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count",
+    "variable-merge-count",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "end": 1,
+     "plugin": 3,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "plugin->end": 1,
+     "plugin->plugin": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 5
+   },
+   "gen_l1": {
+    "kinds": {
+     "end": 1,
+     "plugin": 3,
+     "start": 1
+    },
+    "edges": {
+     "plugin->end": 1,
+     "plugin->plugin": 2,
+     "start->plugin": 1
+    },
+    "edge_count": 4
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'browse')": 1,
+    "('plugin', 'search')": 1,
+    "('text', 'concat')": 1,
+    "('plugin', 'wujie')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'search')": 1,
+    "('plugin', 'browse')": 1,
+    "('plugin', 'wujie')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'browse'), (('plugin', 'search'),))": 1,
+    "(('plugin', 'search'), (('literal',), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('plugin', 'browse'), ('start',), ('text', 'concat')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'search'), (('literal',), ('start',)))": 1,
+    "(('plugin', 'browse'), (('plugin', 'search'),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'browse'), ('start',)))": 1
+   },
+   "workflow": "X17_Wgaixinwenwnan_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X17_Wgaixinwenwnan_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "browse",
+    "search",
+    "wujie"
+   ],
+   "have_ops": [
+    "browse",
+    "search",
+    "wujie"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "OP-SET-EQ",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "end": 1,
+     "if": 1,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "if->text-process": 2,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 3
+    },
+    "edge_count": 11
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->plugin": 1,
+     "plugin->text-process": 2,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('text', 'concat')": 3,
+    "('plugin', 'wujie')": 1,
+    "('plugin', 'create_document')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'write_document')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 3,
+    "('plugin', 'create_document')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'wujie')": 1,
+    "('plugin', 'write_document')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'), ('plugin', 'create_document')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('plugin', 'write_document'), (('plugin', 'create_document'), ('plugin', 'wujie')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'), ('plugin', 'create_document')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('start',), ('start',)))": 1,
+    "(('plugin', 'write_document'), (('plugin', 'create_document'), ('plugin', 'wujie')))": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'),))": 1
+   },
+   "workflow": "X18_W_fenjingjiaoben_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X18_W_fenjingjiaoben_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "create_document",
+    "datetime",
+    "throw_error",
+    "write_document",
+    "wujie"
+   ],
+   "have_ops": [
+    "create_document",
+    "datetime",
+    "throw_error",
+    "write_document",
+    "wujie"
+   ],
+   "causes": [
+    "op-set-equal-needs-dataflow-confirm"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 10
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('plugin', 'add_records')": 1,
+    "('if',)": 4,
+    "('text', 'concat')": 4,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'Image2text')": 1,
+    "('plugin', 'String2Array')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 6,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 6,
+    "('plugin', 'throwError')": 4,
+    "('plugin', 'String2Array')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'Image2text')": 1,
+    "('plugin', 'add_records')": 3
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('if',), ())": 4,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'Image2text'), (('plugin', 'parse_video'),))": 1,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 2,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 6,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 4,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'Image2text'), (('plugin', 'parse_video'),))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 3,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 3,
+    "(('text', 'concat'), ())": 1
+   },
+   "workflow": "X19_Tdouyin3_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X19_Tdouyin3_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "image_2_text",
+    "parse_video",
+    "string_2_array",
+    "throw_error"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "image_2_text",
+    "parse_video",
+    "string_2_array",
+    "throw_error"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "code->end": 1,
+     "llm->code": 1,
+     "plugin->end": 1,
+     "plugin->plugin": 1,
+     "start->llm": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 6
+   },
+   "gen_l1": {
+    "kinds": {
+     "end": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "plugin->end": 1,
+     "plugin->plugin": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 3
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "batch",
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "fcParamVar",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "loopPromptId",
+       "loopPromptName",
+       "loopPromptVersion",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "parameters",
+       "prompt",
+       "responseFormat",
+       "spAntiLeak",
+       "spCurrentTime",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.8·深度思考"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'get_url')": 1,
+    "('plugin', 'getvideodownload')": 1,
+    "('llm',)": 1
+   },
+   "gen_l3": {
+    "('plugin', 'get_url')": 1,
+    "('plugin', 'getvideodownload')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'get_url'), (('start',),))": 1,
+    "(('plugin', 'getvideodownload'), (('plugin', 'get_url'),))": 1,
+    "(('llm',), (('literal',), ('start',), ('start',)))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'get_url'), (('start',),))": 1,
+    "(('plugin', 'getvideodownload'), (('plugin', 'get_url'),))": 1
+   },
+   "workflow": "X1_Wshipintiqu_url_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X1_Wshipintiqu_url_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "get_url",
+    "getvideodownload"
+   ],
+   "have_ops": [
+    "get_url",
+    "getvideodownload"
+   ],
+   "causes": [
+    "code-node-count",
+    "llm-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 10
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('plugin', 'add_records')": 1,
+    "('if',)": 5,
+    "('text', 'concat')": 5,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'String2Array')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 7,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 8,
+    "('plugin', 'throwError')": 4,
+    "('plugin', 'String2Array')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 3
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('if',), ())": 5,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 8,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 4,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 2,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 3,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 3
+   },
+   "workflow": "X20_Tred2_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X20_Tred2_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "have_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "loop": 1,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 2
+    },
+    "edges": {
+     "code->plugin": 1,
+     "if->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 2,
+     "start->plugin": 1,
+     "text-process->plugin": 2
+    },
+    "edge_count": 14
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 2
+    },
+    "edges": {
+     "code->text-process": 1,
+     "if->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 2
+    },
+    "edge_count": 13
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "loop": [
+     {
+      "keys": [
+       "loopType"
+      ],
+      "values": [
+       [
+        "loopType",
+        "infinite"
+       ]
+      ]
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('if',)": 1,
+    "('plugin', 'create_document')": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('text', 'concat')": 2,
+    "('plugin', 'wujie')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'parse_video')": 1,
+    "('loop', 'infinite')": 1,
+    "('break',)": 1,
+    "('continue',)": 1
+   },
+   "gen_l3": {
+    "('plugin', 'parse_video')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'wujie')": 1,
+    "('text', 'concat')": 2,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'create_document')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('if',), ())": 1,
+    "(('plugin', 'create_document'), (('code',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('plugin', 'content_check'), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1,
+    "(('loop', 'infinite'), ())": 1,
+    "(('break',), ())": 1,
+    "(('continue',), ())": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1,
+    "(('if',), ())": 1,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'content_check'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',), ('code',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat'), ('text', 'concat')))": 1
+   },
+   "workflow": "X21_Tredbook_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X21_Tredbook_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "parse_video",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "have_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "parse_video",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "causes": [
+    "loop-form"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 10
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('if',)": 5,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('text', 'concat')": 8,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'wujie')": 4,
+    "('plugin', 'String2Array')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 8,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 8,
+    "('plugin', 'throwError')": 5,
+    "('plugin', 'String2Array')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'wujie')": 4,
+    "('plugin', 'add_records')": 4
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('if',), ())": 5,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 4,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('plugin', 'wujie'), (('literal',), ('plugin', 'content_check'), ('start',), ('text', 'concat')))": 3,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 8,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 5,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'content_check'), ('start',)))": 3,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 4,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 4,
+    "(('text', 'concat'), ())": 2
+   },
+   "workflow": "X22_T_piliang2_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X22_T_piliang2_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "have_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 10
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('if',)": 8,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('text', 'concat')": 9,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'wujie')": 2,
+    "('plugin', 'speech_synthesis')": 3,
+    "('plugin', 'String2Array')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 8,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 8,
+    "('plugin', 'throwError')": 5,
+    "('plugin', 'String2Array')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'wujie')": 2,
+    "('plugin', 'speech_synthesis')": 3,
+    "('plugin', 'add_records')": 4
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('if',), ())": 8,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 2,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 4,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 2,
+    "(('plugin', 'wujie'), (('literal',), ('plugin', 'content_check'), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'speech_synthesis'), (('code',),))": 3,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 8,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 5,
+    "(('plugin', 'String2Array'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'String2Array'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('literal',), ('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'content_check'), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'speech_synthesis'), (('code',),))": 3,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 4,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 4,
+    "(('text', 'concat'), ())": 2
+   },
+   "workflow": "X23_Tpiliang_table_2_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X23_Tpiliang_table_2_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "speech_synthesis",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "have_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "parse_video",
+    "speech_synthesis",
+    "string_2_array",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "causes": [
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "BENIGN-DIFF",
+   "l1_ok": true,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "end": 1,
+     "llm": 1,
+     "output": 2,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "llm->output": 1,
+     "output->llm": 1,
+     "output->plugin": 1,
+     "plugin->end": 1,
+     "plugin->output": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 6
+   },
+   "gen_l1": {
+    "kinds": {
+     "end": 1,
+     "llm": 1,
+     "output": 2,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "llm->output": 1,
+     "output->llm": 1,
+     "output->plugin": 1,
+     "plugin->end": 1,
+     "plugin->output": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 6
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3-0324"
+       ]
+      ]
+     }
+    ],
+    "output": [
+     {
+      "keys": [
+       "callTransferVoice",
+       "chatHistoryWriting",
+       "content",
+       "node_inputs",
+       "streamingOutput"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "output": [
+     {
+      "keys": [
+       "callTransferVoice",
+       "chatHistoryWriting",
+       "content",
+       "node_inputs",
+       "streamingOutput"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3-0324"
+       ]
+      ]
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'read')": 1,
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('output',)": 2
+   },
+   "gen_l3": {
+    "('plugin', 'read')": 1,
+    "('output',)": 2,
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'read'), (('start',),))": 1,
+    "(('llm',), (('plugin', 'read'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('llm',),))": 1,
+    "(('output',), (('plugin', 'read'),))": 1,
+    "(('output',), (('llm',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'read'), (('start',),))": 1,
+    "(('output',), ())": 2,
+    "(('llm',), (('plugin', 'read'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('llm',),))": 1
+   },
+   "workflow": "X26_Wbaogao_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X26_Wbaogao_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "html2url",
+    "read"
+   ],
+   "have_ops": [
+    "html2url",
+    "read"
+   ],
+   "causes": [
+    "legacy-format-params"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "BENIGN-DIFF",
+   "l1_ok": true,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "plugin": 3,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->code": 1,
+     "plugin->end": 2,
+     "plugin->llm": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 7
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "plugin": 3,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->code": 1,
+     "plugin->end": 2,
+     "plugin->llm": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 7
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "batch",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "functionID",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('plugin', 'gen_img')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'gen_img')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('llm',), (('plugin', 'LinkReaderPlugin'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'LinkReaderPlugin'), (('plugin', 'LinkReaderPlugin'),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'LinkReaderPlugin'), (('start',),))": 1,
+    "(('llm',), (('plugin', 'LinkReaderPlugin'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1
+   },
+   "workflow": "X27_Wzaixianjianli_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X27_Wzaixianjianli_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "gen_img",
+    "html2url",
+    "link_reader_plugin"
+   ],
+   "have_ops": [
+    "gen_img",
+    "html2url",
+    "link_reader_plugin"
+   ],
+   "causes": [
+    "legacy-format-params"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "BENIGN-DIFF",
+   "l1_ok": true,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "plugin": 3,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->code": 1,
+     "plugin->end": 2,
+     "plugin->llm": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 7
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "plugin": 3,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->code": 1,
+     "plugin->end": 2,
+     "plugin->llm": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 7
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "functionID",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('plugin', 'gen_img')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'gen_img')": 1
+   },
+   "l4_ok": true,
+   "orig_l4": {
+    "(('llm',), (('plugin', 'LinkReaderPlugin'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'LinkReaderPlugin'), (('start',),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'LinkReaderPlugin'), (('start',),))": 1,
+    "(('llm',), (('plugin', 'LinkReaderPlugin'), ('start',)))": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1
+   },
+   "workflow": "X28_W27zaixianjianli_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X28_W27zaixianjianli_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "gen_img",
+    "html2url",
+    "link_reader_plugin"
+   ],
+   "have_ops": [
+    "gen_img",
+    "html2url",
+    "link_reader_plugin"
+   ],
+   "causes": [
+    "legacy-format-params"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "BENIGN-DIFF",
+   "l1_ok": true,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "output": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->output": 1,
+     "output->code": 1,
+     "plugin->end": 2,
+     "start->llm": 1
+    },
+    "edge_count": 7
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 1,
+     "output": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "code->plugin": 2,
+     "llm->output": 1,
+     "output->code": 1,
+     "plugin->end": 2,
+     "start->llm": 1
+    },
+    "edge_count": 7
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3-0324"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "output": [
+     {
+      "keys": [
+       "callTransferVoice",
+       "chatHistoryWriting",
+       "content",
+       "streamingOutput"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "DeepSeek-V3-0324"
+       ]
+      ]
+     }
+    ],
+    "output": [
+     {
+      "keys": [
+       "callTransferVoice",
+       "chatHistoryWriting",
+       "content",
+       "node_inputs",
+       "streamingOutput"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('llm',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'gen_img')": 1,
+    "('output',)": 1
+   },
+   "gen_l3": {
+    "('llm',)": 1,
+    "('output',)": 1,
+    "('plugin', 'html2url')": 1,
+    "('plugin', 'gen_img')": 1
+   },
+   "l4_ok": true,
+   "orig_l4": {
+    "(('llm',), (('start',),))": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1,
+    "(('output',), ())": 1
+   },
+   "gen_l4": {
+    "(('llm',), (('start',),))": 1,
+    "(('output',), ())": 1,
+    "(('plugin', 'html2url'), (('code',),))": 1,
+    "(('plugin', 'gen_img'), (('code',),))": 1
+   },
+   "workflow": "X29_Wzaixianjianli_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X29_Wzaixianjianli_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "gen_img",
+    "html2url"
+   ],
+   "have_ops": [
+    "gen_img",
+    "html2url"
+   ],
+   "causes": [
+    "legacy-format-params"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "BENIGN-DIFF",
+   "l1_ok": true,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "end": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "plugin->batch": 1,
+     "plugin->plugin": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 4
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "end": 1,
+     "plugin": 2,
+     "start": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "plugin->batch": 1,
+     "plugin->plugin": 1,
+     "start->plugin": 1
+    },
+    "edge_count": 4
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'get_url')": 1,
+    "('batch',)": 1,
+    "('llm',)": 2,
+    "('plugin', 'add_records')": 1,
+    "('if',)": 1,
+    "('plugin', 'getvideodownload')": 1,
+    "('plugin', 'video2mp3')": 1,
+    "('plugin', 'asr_lite')": 1,
+    "('plugin', 'homepagegetData')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'get_url')": 1,
+    "('plugin', 'homepagegetData')": 1,
+    "('batch',)": 1,
+    "('plugin', 'getvideodownload')": 1,
+    "('if',)": 1,
+    "('plugin', 'video2mp3')": 1,
+    "('plugin', 'asr_lite')": 1,
+    "('llm',)": 2,
+    "('plugin', 'add_records')": 1
+   },
+   "l4_ok": true,
+   "orig_l4": {
+    "(('plugin', 'get_url'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'homepagegetData'),))": 1,
+    "(('llm',), (('plugin', 'asr_lite'),))": 1,
+    "(('plugin', 'add_records'), (('code',), ('start',)))": 1,
+    "(('llm',), (('batch',), ('plugin', 'asr_lite')))": 1,
+    "(('if',), ())": 1,
+    "(('plugin', 'getvideodownload'), (('batch',),))": 1,
+    "(('plugin', 'video2mp3'), (('plugin', 'getvideodownload'),))": 1,
+    "(('plugin', 'asr_lite'), (('literal',), ('plugin', 'video2mp3')))": 1,
+    "(('plugin', 'homepagegetData'), (('literal',), ('plugin', 'get_url')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'get_url'), (('start',),))": 1,
+    "(('plugin', 'homepagegetData'), (('literal',), ('plugin', 'get_url')))": 1,
+    "(('batch',), (('plugin', 'homepagegetData'),))": 1,
+    "(('plugin', 'getvideodownload'), (('batch',),))": 1,
+    "(('if',), ())": 1,
+    "(('plugin', 'video2mp3'), (('plugin', 'getvideodownload'),))": 1,
+    "(('plugin', 'asr_lite'), (('literal',), ('plugin', 'video2mp3')))": 1,
+    "(('llm',), (('plugin', 'asr_lite'),))": 1,
+    "(('llm',), (('batch',), ('plugin', 'asr_lite')))": 1,
+    "(('plugin', 'add_records'), (('code',), ('start',)))": 1
+   },
+   "workflow": "X2_W05_douyinweidu_word_",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X2_W05_douyinweidu_word_-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "asr_lite",
+    "get_url",
+    "getvideodownload",
+    "homepage_get_data",
+    "video2mp3"
+   ],
+   "have_ops": [
+    "add_records",
+    "asr_lite",
+    "get_url",
+    "getvideodownload",
+    "homepage_get_data",
+    "video2mp3"
+   ],
+   "causes": [
+    "legacy-format-params"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 1,
+     "variable-merge": 1
+    },
+    "edges": {
+     "batch->end": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "start->plugin": 1,
+     "text-process->variable-merge": 1,
+     "variable-merge->plugin": 1
+    },
+    "edge_count": 11
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 4,
+     "start": 1,
+     "text-process": 3
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 1,
+     "if->plugin": 1,
+     "if->text-process": 1,
+     "plugin->batch": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 1,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 12
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('if',)": 3,
+    "('text', 'concat')": 3,
+    "('plugin', 'throwError')": 2,
+    "('batch',)": 1,
+    "('plugin', 'dy_get_user_profile')": 1,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'extractAllLinks')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 3,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 2,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'extractAllLinks')": 1,
+    "('batch',)": 1,
+    "('plugin', 'dy_get_user_profile')": 1,
+    "('plugin', 'add_records')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('if',), ())": 3,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('batch',), (('plugin', 'extractAllLinks'),))": 1,
+    "(('plugin', 'dy_get_user_profile'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('batch',), ('variable-merge',), ('variable-merge',), ('variable-merge',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 1,
+    "(('plugin', 'extractAllLinks'), (('start',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 2,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 2,
+    "(('plugin', 'extractAllLinks'), (('start',),))": 1,
+    "(('batch',), (('plugin', 'extractAllLinks'),))": 1,
+    "(('plugin', 'dy_get_user_profile'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1
+   },
+   "workflow": "X3_Tdouyinshuju_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X3_Tdouyinshuju_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "dy_get_user_profile",
+    "extract_all_links",
+    "throw_error"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "dy_get_user_profile",
+    "extract_all_links",
+    "throw_error"
+   ],
+   "causes": [
+    "text-node-count",
+    "variable-merge-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 2,
+     "end": 1,
+     "if": 2,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 2,
+     "variable-merge": 1
+    },
+    "edges": {
+     "batch->code": 1,
+     "code->end": 1,
+     "code->plugin": 1,
+     "if->batch": 1,
+     "if->plugin": 1,
+     "if->text-process": 2,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 2,
+     "plugin->plugin": 1,
+     "start->plugin": 1,
+     "text-process->variable-merge": 2,
+     "variable-merge->plugin": 1
+    },
+    "edge_count": 16
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 3,
+     "end": 1,
+     "if": 2,
+     "plugin": 6,
+     "start": 1,
+     "text-process": 5
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 2,
+     "code->text-process": 1,
+     "if->batch": 1,
+     "if->plugin": 1,
+     "if->text-process": 2,
+     "plugin->end": 2,
+     "plugin->if": 2,
+     "plugin->plugin": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 3,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 20
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "method",
+       "node_inputs",
+       "splitParams"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('if',)": 6,
+    "('plugin', 'parse_video')": 1,
+    "('text', 'concat')": 6,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'dy_get_user_aweme_list')": 1,
+    "('plugin', 'extractFirstLink')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 5,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 6,
+    "('plugin', 'throwError')": 5,
+    "('plugin', 'extractFirstLink')": 1,
+    "('plugin', 'dy_get_user_aweme_list')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'add_records')": 1,
+    "('text', 'split')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'dy_get_user_aweme_list'),))": 1,
+    "(('if',), ())": 6,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('text', 'concat'), (('plugin', 'dy_get_user_aweme_list'), ('plugin', 'dy_get_user_aweme_list')))": 1,
+    "(('plugin', 'dy_get_user_aweme_list'), (('plugin', 'extractFirstLink'), ('start',)))": 1,
+    "(('plugin', 'extractFirstLink'), (('start',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 6,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 5,
+    "(('plugin', 'extractFirstLink'), (('start',),))": 1,
+    "(('plugin', 'dy_get_user_aweme_list'), (('plugin', 'extractFirstLink'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'dy_get_user_aweme_list'), ('plugin', 'dy_get_user_aweme_list')))": 1,
+    "(('batch',), (('plugin', 'dy_get_user_aweme_list'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('text', 'split'), (('start',),))": 1,
+    "(('text', 'concat'), (('code',), ('plugin', 'create_table')))": 1
+   },
+   "workflow": "X4_Tdouyinfeishu_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X4_Tdouyinfeishu_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "dy_get_user_aweme_list",
+    "extract_first_link",
+    "parse_video",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "have_ops": [
+    "add_records",
+    "content_check",
+    "create_table",
+    "datetime",
+    "dy_get_user_aweme_list",
+    "extract_first_link",
+    "parse_video",
+    "throw_error",
+    "voice_to_text"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count",
+    "variable-merge-count",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 2,
+     "end": 1,
+     "if": 2,
+     "plugin": 5,
+     "start": 1,
+     "text-process": 2,
+     "variable-merge": 1
+    },
+    "edges": {
+     "batch->code": 1,
+     "code->end": 1,
+     "code->plugin": 1,
+     "if->batch": 1,
+     "if->plugin": 1,
+     "if->text-process": 2,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 2,
+     "plugin->plugin": 1,
+     "start->plugin": 1,
+     "text-process->variable-merge": 2,
+     "variable-merge->plugin": 1
+    },
+    "edge_count": 16
+   },
+   "gen_l1": {
+    "kinds": {
+     "batch": 1,
+     "code": 3,
+     "end": 1,
+     "if": 2,
+     "plugin": 6,
+     "start": 1,
+     "text-process": 5
+    },
+    "edges": {
+     "batch->text-process": 1,
+     "code->plugin": 2,
+     "code->text-process": 1,
+     "if->batch": 1,
+     "if->plugin": 1,
+     "if->text-process": 2,
+     "plugin->end": 2,
+     "plugin->if": 2,
+     "plugin->plugin": 1,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->code": 3,
+     "text-process->end": 1,
+     "text-process->plugin": 1
+    },
+    "edge_count": 20
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "method",
+       "node_inputs",
+       "splitParams"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "batch": [
+     {
+      "keys": [
+       "batchSize",
+       "concurrentSize",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'create_table')": 1,
+    "('plugin', 'datetime')": 1,
+    "('batch',)": 1,
+    "('if',)": 4,
+    "('plugin', 'parse_video')": 1,
+    "('text', 'concat')": 4,
+    "('plugin', 'add_records')": 1,
+    "('plugin', 'throwError')": 2,
+    "('plugin', 'dy_get_user_aweme_list')": 1,
+    "('plugin', 'extractFirstLink')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'datetime')": 1,
+    "('text', 'concat')": 4,
+    "('plugin', 'create_table')": 1,
+    "('if',)": 4,
+    "('plugin', 'throwError')": 4,
+    "('plugin', 'extractFirstLink')": 1,
+    "('plugin', 'dy_get_user_aweme_list')": 1,
+    "('batch',)": 1,
+    "('plugin', 'parse_video')": 1,
+    "('plugin', 'add_records')": 1,
+    "('text', 'split')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('plugin', 'create_table'), (('code',), ('code',), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('batch',), (('plugin', 'dy_get_user_aweme_list'),))": 1,
+    "(('if',), ())": 4,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('text', 'concat'), (('variable-merge',), ('variable-merge',), ('variable-merge',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'add_records'), ('plugin', 'add_records')))": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 1,
+    "(('plugin', 'throwError'), (('variable-merge',),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('text', 'concat'), (('plugin', 'dy_get_user_aweme_list'), ('plugin', 'dy_get_user_aweme_list')))": 1,
+    "(('plugin', 'dy_get_user_aweme_list'), (('plugin', 'extractFirstLink'), ('start',)))": 1,
+    "(('plugin', 'extractFirstLink'), (('start',),))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_table'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 4,
+    "(('text', 'concat'), (('plugin', 'create_table'), ('plugin', 'create_table')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 4,
+    "(('plugin', 'extractFirstLink'), (('start',),))": 1,
+    "(('plugin', 'dy_get_user_aweme_list'), (('plugin', 'extractFirstLink'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'dy_get_user_aweme_list'), ('plugin', 'dy_get_user_aweme_list')))": 1,
+    "(('batch',), (('plugin', 'dy_get_user_aweme_list'),))": 1,
+    "(('plugin', 'parse_video'), (('batch',), ('start',)))": 1,
+    "(('plugin', 'add_records'), (('code',), ('plugin', 'create_table'), ('start',)))": 1,
+    "(('text', 'split'), (('start',),))": 1,
+    "(('text', 'concat'), (('code',), ('plugin', 'create_table')))": 1
+   },
+   "workflow": "X5_TDYwushuiyin_table_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X5_TDYwushuiyin_table_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "dy_get_user_aweme_list",
+    "extract_first_link",
+    "parse_video",
+    "throw_error"
+   ],
+   "have_ops": [
+    "add_records",
+    "create_table",
+    "datetime",
+    "dy_get_user_aweme_list",
+    "extract_first_link",
+    "parse_video",
+    "throw_error"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count",
+    "variable-merge-count",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 3,
+     "end": 1,
+     "if": 1,
+     "plugin": 12,
+     "start": 1,
+     "text-process": 10
+    },
+    "edges": {
+     "code->text-process": 7,
+     "if->code": 1,
+     "if->text-process": 1,
+     "plugin->code": 6,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 1,
+     "start->text-process": 1,
+     "text-process->plugin": 10
+    },
+    "edge_count": 32
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 6,
+     "end": 1,
+     "if": 1,
+     "plugin": 12,
+     "start": 1,
+     "text-process": 9
+    },
+    "edges": {
+     "code->code": 1,
+     "code->plugin": 2,
+     "code->text-process": 7,
+     "if->code": 2,
+     "plugin->code": 6,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 1,
+     "start->text-process": 1,
+     "text-process->code": 1,
+     "text-process->plugin": 8
+    },
+    "edge_count": 34
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "content",
+       "node_inputs",
+       "streamingOutput",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "useAnswerContent"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('text', 'concat')": 10,
+    "('plugin', 'wujie')": 8,
+    "('plugin', 'create_document')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'write_document')": 1,
+    "('plugin', 'browse')": 1
+   },
+   "gen_l3": {
+    "('text', 'concat')": 9,
+    "('plugin', 'wujie')": 8,
+    "('plugin', 'browse')": 1,
+    "('plugin', 'create_document')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'write_document')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('start',), ('text', 'concat')))": 2,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('text', 'concat')))": 5,
+    "(('text', 'concat'), (('code',), ('code',), ('plugin', 'wujie')))": 5,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat')))": 1,
+    "(('text', 'concat'), (('plugin', 'wujie'),))": 1,
+    "(('if',), ())": 1,
+    "(('plugin', 'throwError'), (('text', 'concat'),))": 1,
+    "(('text', 'concat'), (('plugin', 'create_document'), ('plugin', 'create_document')))": 1,
+    "(('plugin', 'write_document'), (('plugin', 'create_document'), ('text', 'concat')))": 1,
+    "(('text', 'concat'), (('plugin', 'wujie'), ('plugin', 'wujie'), ('plugin', 'wujie'), ('plugin', 'wujie'), ('plugin', 'wujie')))": 1,
+    "(('plugin', 'browse'), (('plugin', 'wujie'),))": 1
+   },
+   "gen_l4": {
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('start',), ('text', 'concat')))": 2,
+    "(('plugin', 'browse'), (('plugin', 'wujie'),))": 1,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'wujie'), ('start',)))": 1,
+    "(('text', 'concat'), (('plugin', 'wujie'),))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat')))": 1,
+    "(('if',), ())": 1,
+    "(('text', 'concat'), (('code',), ('plugin', 'create_document')))": 1,
+    "(('plugin', 'throwError'), (('code',),))": 1,
+    "(('text', 'concat'), (('code',), ('code',), ('plugin', 'wujie')))": 5,
+    "(('plugin', 'wujie'), (('literal',), ('start',), ('text', 'concat')))": 5,
+    "(('plugin', 'write_document'), (('code',), ('plugin', 'create_document')))": 1
+   },
+   "workflow": "X6_Wdagangshuchu_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X6_Wdagangshuchu_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "browse",
+    "create_document",
+    "throw_error",
+    "write_document",
+    "wujie"
+   ],
+   "have_ops": [
+    "browse",
+    "create_document",
+    "throw_error",
+    "write_document",
+    "wujie"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "OP-SET-EQ",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 2
+    },
+    "edges": {
+     "code->plugin": 1,
+     "if->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 2,
+     "start->plugin": 1,
+     "text-process->plugin": 2
+    },
+    "edge_count": 14
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "if": 1,
+     "plugin": 7,
+     "start": 1,
+     "text-process": 2
+    },
+    "edges": {
+     "code->text-process": 1,
+     "if->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 2,
+     "plugin->if": 1,
+     "plugin->plugin": 2,
+     "plugin->text-process": 1,
+     "start->plugin": 1,
+     "text-process->plugin": 2
+    },
+    "edge_count": 13
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('if',)": 1,
+    "('plugin', 'create_document')": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('text', 'concat')": 2,
+    "('plugin', 'wujie')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'parse_video')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'parse_video')": 1,
+    "('if',)": 1,
+    "('plugin', 'throwError')": 1,
+    "('plugin', 'voice_to_text')": 1,
+    "('plugin', 'content_check')": 1,
+    "('plugin', 'wujie')": 1,
+    "('text', 'concat')": 2,
+    "('plugin', 'datetime')": 1,
+    "('plugin', 'create_document')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('if',), ())": 1,
+    "(('plugin', 'create_document'), (('code',), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'wujie'), (('literal',), ('plugin', 'content_check'), ('start',), ('text', 'concat')))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'parse_video'), (('start',), ('start',)))": 1,
+    "(('if',), ())": 1,
+    "(('plugin', 'throwError'), (('literal',),))": 1,
+    "(('plugin', 'voice_to_text'), (('plugin', 'parse_video'), ('start',)))": 1,
+    "(('plugin', 'content_check'), (('plugin', 'voice_to_text'), ('start',)))": 1,
+    "(('plugin', 'wujie'), (('literal',), ('literal',), ('plugin', 'content_check'), ('start',)))": 1,
+    "(('text', 'concat'), (('code',), ('code',)))": 1,
+    "(('plugin', 'datetime'), ())": 1,
+    "(('text', 'concat'), (('plugin', 'datetime'),))": 1,
+    "(('plugin', 'create_document'), (('start',), ('text', 'concat'), ('text', 'concat')))": 1
+   },
+   "workflow": "X7_W_red_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X7_W_red_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "parse_video",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "have_ops": [
+    "content_check",
+    "create_document",
+    "datetime",
+    "parse_video",
+    "throw_error",
+    "voice_to_text",
+    "wujie"
+   ],
+   "causes": [
+    "op-set-equal-needs-dataflow-confirm"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DIFF",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": false,
+   "orig_l1": {
+    "kinds": {
+     "code": 3,
+     "end": 1,
+     "http": 3,
+     "if": 2,
+     "llm": 2,
+     "plugin": 36,
+     "start": 1,
+     "text-process": 1,
+     "variable-merge": 2
+    },
+    "edges": {
+     "code->llm": 1,
+     "code->plugin": 2,
+     "http->code": 1,
+     "http->plugin": 2,
+     "if->plugin": 4,
+     "llm->code": 1,
+     "llm->http": 2,
+     "llm->llm": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 2,
+     "plugin->plugin": 27,
+     "plugin->text-process": 1,
+     "plugin->variable-merge": 4,
+     "start->http": 1,
+     "text-process->plugin": 1,
+     "variable-merge->plugin": 2
+    },
+    "edge_count": 54
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 2,
+     "end": 1,
+     "http": 1,
+     "if": 2,
+     "llm": 2,
+     "plugin": 34,
+     "start": 1,
+     "text-process": 2,
+     "variable-merge": 2
+    },
+    "edges": {
+     "code->llm": 1,
+     "code->plugin": 1,
+     "http->code": 1,
+     "if->text-process": 1,
+     "if->variable-merge": 3,
+     "llm->if": 1,
+     "llm->llm": 1,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->if": 1,
+     "plugin->plugin": 30,
+     "plugin->text-process": 1,
+     "start->http": 1,
+     "text-process->plugin": 1,
+     "text-process->variable-merge": 1,
+     "variable-merge->plugin": 2
+    },
+    "edge_count": 48
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "fcParam",
+       "fcParamVar",
+       "generationDiversity",
+       "llmParam",
+       "loopPromptId",
+       "loopPromptName",
+       "loopPromptVersion",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "parameters",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.5·Pro·32k"
+       ]
+      ]
+     },
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "fcParamVar",
+       "generationDiversity",
+       "llmParam",
+       "loopPromptId",
+       "loopPromptName",
+       "loopPromptVersion",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "parameters",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.5·Pro·32k"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "http": [
+     {
+      "keys": [
+       "apiInfo",
+       "auth",
+       "authOpen",
+       "authType",
+       "body",
+       "bodyData",
+       "bodyType",
+       "headers",
+       "method",
+       "params",
+       "retryTimes",
+       "setting",
+       "timeout",
+       "url"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "http": [
+     {
+      "keys": [
+       "apiInfo",
+       "auth",
+       "authOpen",
+       "body",
+       "bodyData",
+       "bodyType",
+       "headers",
+       "method",
+       "node_inputs",
+       "params",
+       "url"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "systemPrompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.5·Pro·32k"
+       ]
+      ]
+     }
+    ],
+    "if": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "text-process": [
+     {
+      "keys": [
+       "concatParams",
+       "method",
+       "node_inputs"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "concatParams",
+       "method"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('llm',)": 2,
+    "('plugin', 'audio_infos')": 1,
+    "('plugin', 'str_to_list')": 9,
+    "('plugin', 'audio_timelines')": 1,
+    "('plugin', 'create_draft')": 1,
+    "('plugin', 'add_audios')": 1,
+    "('plugin', 'save_draft')": 1,
+    "('plugin', 'add_images')": 4,
+    "('plugin', 'caption_infos')": 3,
+    "('plugin', 'effect_infos')": 1,
+    "('plugin', 'add_effects')": 1,
+    "('plugin', 'imgs_infos')": 3,
+    "('text', 'concat')": 1,
+    "('plugin', 'add_captions')": 3,
+    "('plugin', 'keyframes_infos')": 2,
+    "('plugin', 'add_sticker')": 2,
+    "('plugin', 'add_masks')": 1,
+    "('plugin', 'add_keyframes')": 2,
+    "('if',)": 2,
+    "('http',)": 3
+   },
+   "gen_l3": {
+    "('http',)": 1,
+    "('llm',)": 2,
+    "('if',)": 2,
+    "('plugin', 'str_to_list')": 7,
+    "('plugin', 'audio_timelines')": 1,
+    "('plugin', 'audio_infos')": 1,
+    "('plugin', 'caption_infos')": 3,
+    "('text', 'concat')": 2,
+    "('plugin', 'imgs_infos')": 3,
+    "('plugin', 'effect_infos')": 1,
+    "('plugin', 'create_draft')": 1,
+    "('plugin', 'add_images')": 4,
+    "('plugin', 'add_masks')": 1,
+    "('plugin', 'keyframes_infos')": 2,
+    "('plugin', 'add_keyframes')": 2,
+    "('plugin', 'add_captions')": 3,
+    "('plugin', 'add_sticker')": 2,
+    "('plugin', 'add_effects')": 1,
+    "('plugin', 'add_audios')": 1,
+    "('plugin', 'save_draft')": 1
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('llm',), (('llm',),))": 1,
+    "(('plugin', 'audio_infos'), (('plugin', 'audio_timelines'), ('variable-merge',)))": 1,
+    "(('plugin', 'str_to_list'), (('code',),))": 3,
+    "(('plugin', 'audio_timelines'), (('variable-merge',),))": 1,
+    "(('plugin', 'create_draft'), (('literal',), ('literal',)))": 1,
+    "(('plugin', 'add_audios'), (('plugin', 'audio_infos'), ('plugin', 'create_draft')))": 1,
+    "(('plugin', 'save_draft'), (('plugin', 'create_draft'),))": 1,
+    "(('plugin', 'add_images'), (('literal',), ('literal',), ('literal',), ('plugin', 'create_draft'), ('plugin', 'imgs_infos')))": 1,
+    "(('plugin', 'str_to_list'), (('text', 'concat'),))": 1,
+    "(('plugin', 'caption_infos'), (('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 2,
+    "(('llm',), (('code',),))": 1,
+    "(('plugin', 'str_to_list'), (('literal',),))": 3,
+    "(('plugin', 'effect_infos'), (('literal',), ('plugin', 'str_to_list')))": 1,
+    "(('plugin', 'add_effects'), (('plugin', 'create_draft'), ('plugin', 'effect_infos')))": 1,
+    "(('plugin', 'imgs_infos'), (('literal',), ('literal',), ('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 1,
+    "(('plugin', 'add_images'), (('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'create_draft'), ('plugin', 'imgs_infos')))": 3,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'imgs_infos'), (('literal',), ('literal',), ('plugin', 'audio_timelines'), ('variable-merge',)))": 1,
+    "(('plugin', 'caption_infos'), (('literal',), ('literal',), ('literal',), ('literal',), ('llm',), ('llm',)))": 1,
+    "(('plugin', 'add_captions'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'caption_infos'), ('plugin', 'create_draft')))": 3,
+    "(('plugin', 'keyframes_infos'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'add_images')))": 1,
+    "(('plugin', 'keyframes_infos'), (('literal',), ('literal',), ('literal',), ('plugin', 'add_images')))": 1,
+    "(('plugin', 'add_sticker'), (('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'audio_timelines'), ('plugin', 'audio_timelines'), ('plugin', 'create_draft')))": 2,
+    "(('plugin', 'add_masks'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'add_images'), ('plugin', 'create_draft')))": 1,
+    "(('plugin', 'add_keyframes'), (('plugin', 'create_draft'), ('plugin', 'keyframes_infos')))": 2,
+    "(('if',), ())": 2,
+    "(('plugin', 'str_to_list'), (('start',),))": 2,
+    "(('http',), ())": 3,
+    "(('plugin', 'imgs_infos'), (('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 1
+   },
+   "gen_l4": {
+    "(('http',), (('start',), ('start',)))": 1,
+    "(('llm',), (('code',),))": 1,
+    "(('llm',), (('llm',),))": 1,
+    "(('if',), ())": 2,
+    "(('plugin', 'str_to_list'), (('variable-merge',),))": 2,
+    "(('plugin', 'audio_timelines'), (('plugin', 'str_to_list'),))": 1,
+    "(('plugin', 'audio_infos'), (('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 1,
+    "(('plugin', 'str_to_list'), (('code',),))": 2,
+    "(('plugin', 'caption_infos'), (('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 2,
+    "(('text', 'concat'), (('code',),))": 1,
+    "(('plugin', 'str_to_list'), (('text', 'concat'),))": 1,
+    "(('plugin', 'imgs_infos'), (('literal',), ('literal',), ('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 2,
+    "(('text', 'concat'), ())": 1,
+    "(('plugin', 'str_to_list'), (('literal',),))": 2,
+    "(('plugin', 'imgs_infos'), (('plugin', 'audio_timelines'), ('plugin', 'str_to_list')))": 1,
+    "(('plugin', 'effect_infos'), (('literal',), ('plugin', 'str_to_list')))": 1,
+    "(('plugin', 'caption_infos'), (('code',), ('code',), ('literal',), ('literal',), ('literal',), ('literal',)))": 1,
+    "(('plugin', 'create_draft'), (('literal',), ('literal',)))": 1,
+    "(('plugin', 'add_images'), (('literal',), ('literal',), ('literal',), ('plugin', 'create_draft'), ('plugin', 'imgs_infos')))": 1,
+    "(('plugin', 'add_images'), (('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'create_draft'), ('plugin', 'imgs_infos')))": 3,
+    "(('plugin', 'add_masks'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'add_images'), ('plugin', 'create_draft')))": 1,
+    "(('plugin', 'keyframes_infos'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'add_images')))": 1,
+    "(('plugin', 'add_keyframes'), (('plugin', 'create_draft'), ('plugin', 'keyframes_infos')))": 2,
+    "(('plugin', 'keyframes_infos'), (('literal',), ('literal',), ('literal',), ('plugin', 'add_images')))": 1,
+    "(('plugin', 'add_captions'), (('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'caption_infos'), ('plugin', 'create_draft')))": 3,
+    "(('plugin', 'add_sticker'), (('literal',), ('literal',), ('literal',), ('literal',), ('plugin', 'audio_timelines'), ('plugin', 'audio_timelines'), ('plugin', 'create_draft')))": 2,
+    "(('plugin', 'add_effects'), (('plugin', 'create_draft'), ('plugin', 'effect_infos')))": 1,
+    "(('plugin', 'add_audios'), (('plugin', 'audio_infos'), ('plugin', 'create_draft')))": 1,
+    "(('plugin', 'save_draft'), (('plugin', 'create_draft'),))": 1
+   },
+   "workflow": "X97_Vgecishiping_video_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X97_Vgecishiping_video_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_audios",
+    "add_captions",
+    "add_effects",
+    "add_images",
+    "add_keyframes",
+    "add_masks",
+    "add_sticker",
+    "audio_infos",
+    "audio_timelines",
+    "caption_infos",
+    "create_draft",
+    "effect_infos"
+   ],
+   "have_ops": [
+    "add_audios",
+    "add_captions",
+    "add_effects",
+    "add_images",
+    "add_keyframes",
+    "add_masks",
+    "add_sticker",
+    "audio_infos",
+    "audio_timelines",
+    "caption_infos",
+    "create_draft",
+    "effect_infos"
+   ],
+   "causes": [
+    "code-node-count",
+    "text-node-count",
+    "plugin-count"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "DATAFLOW-EQ",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "code": 2,
+     "end": 1,
+     "llm": 3,
+     "plugin": 7,
+     "start": 1
+    },
+    "edges": {
+     "code->llm": 2,
+     "code->plugin": 3,
+     "llm->code": 1,
+     "llm->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->llm": 1,
+     "plugin->plugin": 6,
+     "start->plugin": 1
+    },
+    "edge_count": 18
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 2,
+     "end": 1,
+     "llm": 3,
+     "plugin": 7,
+     "start": 1
+    },
+    "edges": {
+     "code->llm": 2,
+     "code->plugin": 3,
+     "llm->code": 1,
+     "llm->plugin": 2,
+     "plugin->code": 1,
+     "plugin->end": 1,
+     "plugin->llm": 1,
+     "plugin->plugin": 4,
+     "start->plugin": 1
+    },
+    "edge_count": 16
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "outDocLink",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "responseFormat",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·工具调用"
+       ]
+      ]
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "plugin": [
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "inputDefs",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     },
+     {
+      "keys": [
+       "apiID",
+       "apiName",
+       "apiParam",
+       "node_inputs",
+       "outDocLink",
+       "pluginAuthMode",
+       "pluginID",
+       "pluginName",
+       "pluginVersion",
+       "tips"
+      ],
+      "values": []
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "systemPrompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·工具调用"
+       ]
+      ]
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('plugin', 'hot_list')": 1,
+    "('llm',)": 3,
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('plugin', 'get_access_token')": 1,
+    "('plugin', 'text2image')": 1,
+    "('plugin', 'add_material')": 1,
+    "('plugin', 'add_draft')": 1,
+    "('plugin', 'publish_article')": 1
+   },
+   "gen_l3": {
+    "('plugin', 'hot_list')": 1,
+    "('llm',)": 3,
+    "('plugin', 'text2image')": 1,
+    "('plugin', 'LinkReaderPlugin')": 1,
+    "('plugin', 'get_access_token')": 1,
+    "('plugin', 'add_material')": 1,
+    "('plugin', 'add_draft')": 1,
+    "('plugin', 'publish_article')": 1
+   },
+   "l4_ok": true,
+   "orig_l4": {
+    "(('plugin', 'hot_list'), ())": 1,
+    "(('llm',), (('code',),))": 2,
+    "(('plugin', 'LinkReaderPlugin'), (('code',),))": 1,
+    "(('llm',), (('plugin', 'LinkReaderPlugin'),))": 1,
+    "(('plugin', 'get_access_token'), (('start',), ('start',)))": 1,
+    "(('plugin', 'text2image'), (('llm',),))": 1,
+    "(('plugin', 'add_material'), (('plugin', 'get_access_token'), ('plugin', 'text2image')))": 1,
+    "(('plugin', 'add_draft'), (('code',), ('llm',), ('plugin', 'add_material'), ('plugin', 'get_access_token')))": 1,
+    "(('plugin', 'publish_article'), (('plugin', 'add_draft'), ('plugin', 'get_access_token')))": 1
+   },
+   "gen_l4": {
+    "(('plugin', 'hot_list'), ())": 1,
+    "(('llm',), (('code',),))": 2,
+    "(('plugin', 'text2image'), (('llm',),))": 1,
+    "(('plugin', 'LinkReaderPlugin'), (('code',),))": 1,
+    "(('llm',), (('plugin', 'LinkReaderPlugin'),))": 1,
+    "(('plugin', 'get_access_token'), (('start',), ('start',)))": 1,
+    "(('plugin', 'add_material'), (('plugin', 'get_access_token'), ('plugin', 'text2image')))": 1,
+    "(('plugin', 'add_draft'), (('code',), ('llm',), ('plugin', 'add_material'), ('plugin', 'get_access_token')))": 1,
+    "(('plugin', 'publish_article'), (('plugin', 'add_draft'), ('plugin', 'get_access_token')))": 1
+   },
+   "workflow": "X9_Wgongzhonghao_word_1",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/X9_Wgongzhonghao_word_1-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [
+    "add_draft",
+    "add_material",
+    "get_access_token",
+    "hot_list",
+    "link_reader_plugin",
+    "publish_article",
+    "text2image"
+   ],
+   "have_ops": [
+    "add_draft",
+    "add_material",
+    "get_access_token",
+    "hot_list",
+    "link_reader_plugin",
+    "publish_article",
+    "text2image"
+   ],
+   "causes": [
+    "structure-diff-dataflow-equal"
+   ]
+  },
+  {
+   "orig_parse_errors": 0,
+   "gen_parse_errors": 0,
+   "verdict": "OP-SET-EQ",
+   "l1_ok": false,
+   "l2_ok": false,
+   "l3_ok": true,
+   "orig_l1": {
+    "kinds": {
+     "end": 1,
+     "llm": 2,
+     "start": 1,
+     "variable-merge": 1
+    },
+    "edges": {
+     "llm->variable-merge": 2,
+     "start->llm": 2,
+     "variable-merge->end": 1
+    },
+    "edge_count": 5
+   },
+   "gen_l1": {
+    "kinds": {
+     "code": 1,
+     "end": 1,
+     "llm": 2,
+     "start": 1
+    },
+    "edges": {
+     "code->end": 1,
+     "llm->code": 2,
+     "start->llm": 2
+    },
+    "edge_count": 5
+   },
+   "orig_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "canContinue",
+       "chatHistoryRound",
+       "enableChatHistory",
+       "fcParamVar",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "loopPromptId",
+       "loopPromptName",
+       "loopPromptVersion",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "parameters",
+       "prompt",
+       "responseFormat",
+       "spAntiLeak",
+       "spCurrentTime",
+       "stableSystemPrompt",
+       "systemPrompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.8·深度思考"
+       ]
+      ]
+     }
+    ],
+    "variable-merge": [
+     {
+      "keys": [
+       "mergeGroups"
+      ],
+      "values": []
+     }
+    ]
+   },
+   "gen_l2": {
+    "start": [
+     {
+      "keys": [],
+      "values": []
+     }
+    ],
+    "llm": [
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "prompt",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.8·深度思考"
+       ]
+      ]
+     },
+     {
+      "keys": [
+       "chatHistoryRound",
+       "enableChatHistory",
+       "frequencyPenalty",
+       "generationDiversity",
+       "llmParam",
+       "maxTokens",
+       "modelName",
+       "modelType",
+       "node_inputs",
+       "temperature",
+       "topP"
+      ],
+      "values": [
+       [
+        "modelName",
+        "豆包·1.8·深度思考"
+       ]
+      ]
+     }
+    ],
+    "code": [
+     {
+      "keys": [
+       "code",
+       "language",
+       "node_inputs"
+      ],
+      "values": []
+     }
+    ],
+    "end": [
+     {
+      "keys": [
+       "node_inputs",
+       "terminatePlan"
+      ],
+      "values": [
+       [
+        "terminatePlan",
+        "returnVariables"
+       ]
+      ]
+     }
+    ]
+   },
+   "orig_l3": {
+    "('llm',)": 2
+   },
+   "gen_l3": {
+    "('llm',)": 2
+   },
+   "l4_ok": false,
+   "orig_l4": {
+    "(('llm',), (('literal',), ('start',), ('start',)))": 1,
+    "(('llm',), (('start',),))": 1
+   },
+   "gen_l4": {
+    "(('llm',), (('start',),))": 1,
+    "(('llm',), ())": 1
+   },
+   "workflow": "x001_llm_chain",
+   "original_kind": "export",
+   "original_path": "coze-exports/coze-exports/x001-draft.yaml",
+   "op_overlap": 1.0,
+   "want_ops": [],
+   "have_ops": [],
+   "causes": [
+    "op-set-equal-needs-dataflow-confirm"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,94 @@
+@language nodecoda/1
+// X11 通过关键词检索抖音相关视频信息 → 写入飞书多维表格 — coze-reference 语义重写
+//
+// 原结构（X11_Tdouyin2_table_1-draft.yaml）:
+//   start(api_key, app_token, douyin_cookie, keyword)
+//     → douyin_keyword(api_key, keyword, publish_time=0, sort_type=1, cookie) → result(array<item>)
+//     → condition(167546): result len > 0 ?
+//         false(空) → text(138299: "搜索失败，请重试") → variable_merge → throwError
+//         true(非空) → datetime → code(152653: table_name=`W0009-${dateTime}` + fields + records)
+//           → create_table(app_token, name, fields) → condition(198633): code = 0 ?
+//             true(成功) → add_records(app_token, records←152653.records, table_id←create_table.data.table_id)
+//               → condition(755643): code = 0 ? true → end ; false → text(728616) → merge → throwError
+//             false(失败) → text(617035: 创建失败) → merge → throwError
+//
+// 重写说明:
+//   - result 为 array<DouyinKeywordSearchResultItem>（E5-b 第四次应用：元素 record）
+//   - 无 batch：records 由 152653 一次性 map 生成 → foreign code 直接消费 array<record> 输入
+//     （验证：foreign code 支持 array<record:X> 输入，无需逐字段展开）
+//   - ncoda 无 `len>` 运算符语法 → 用 foreign code 计算元素个数，`cnt == 0` 表达空结果分支
+//   - code 152653 的 fields 定义省略（同 X4 族：code 类型系统不支持 array<map<string,any>>）
+//   - 原 code 152653 拆分：table_name（foreign code 单字段）+ records（foreign code 数组输入）
+
+@mode workflow
+
+import "coze-biz.datetime";
+import "coze-biz.douyin_keyword_search";
+import "coze-biz.feishu_bitable";
+import "coze-biz.throw_error";
+function main(string api_key, string app_token, string douyin_cookie, string keyword) {
+    // douyin_keyword: 关键词检索（原 192635）
+    let results = douyin_keyword_search.douyin_keyword({
+        "api_key": api_key,
+        "keyword": keyword,
+        "publish_time": 0,
+        "sort_type": 1,
+        "cookie": douyin_cookie
+    });
+
+    // 空结果检查（原 167546 `result len > 0`; G10: len 计算内置）
+    let cnt = len(results.result);
+
+    // 空结果 → 搜索失败（原 text 138299 → throwError）
+    if (cnt == 0) {
+        throw_error.throw_error({"error_message": ["搜索失败，请重试"]});
+    }
+
+    // datetime: 表名后缀（W0009-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 表名（对应原 code 152653 的 table_name）
+    let table_name = `W0009-${now.dateTime}`;
+
+    // records（对应原 code 152653 的 records: for 表达式聚合 → json.stringify）
+    let records = for (it in results.result) {
+        let payload = json.stringify({
+            "视频地址": it.share_url,
+            "标题": it.desc,
+            "封面": it.cover_url,
+            "点赞数量": to_string(it.like_count),
+            "评论数量": to_string(it.comment_count),
+            "分享数量": to_string(it.share_count)
+        });
+        yield { "fields": payload };
+    };
+
+    // create_table: 创建多维表格（原 160311; fields 定义省略）
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支: 创建失败 → text 617035 → throwError
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败，请联系客服: shuidi_tech ；；；错误信息：[${created.status_code}] ${created.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // add_records: 一次性写入全部记录（原 105492; 成功 → end）
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": records,
+        "table_id": created.data.table_id
+    });
+
+    // 失败分支: 添加失败 → text 728616 → throwError
+    if (added.status_code != 0) {
+        let err = `多维表格数据表中添加数据失败，请联系客服: shuidi_tech ；；；错误信息：[${added.status_code}] ${added.msg}`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    return "";
+}

@@ -1,0 +1,62 @@
+@language nodecoda/1
+// X13 飞影数字人工作流（provider slug: feiyin_digital_human，原插件名见 desc）（更换数字人和声音）— coze-reference 语义重写
+//
+// 原结构（见 original.flow.yaml）:
+//   start(text, hifly_id, speaker_id, video_url)
+//     → create_lipsync_video(job_id)
+//     → loop(infinite, loopCount=10): 轮询体 inspect_video_creation_status
+//         video_Url 不为空 → break(终止循环); 否则 sleep 3s → continue(继续循环)
+//     → code(filterFirstNonEmpty) → end(output)
+//
+// 重写说明:
+//   - loopCount=10 上限 → 固定 10 次轮询（range(1, 11) 声明式，G15），语义等价（无限轮询 + 有界护栏）
+//   - 轮询间隔 3s 保留（原 code 节点 setTimeout 3000）
+//   - op 语义假设: 条件 "video_Url 不为空"（op10，右侧无值）→ status.video_Url != ""
+//   - 提前退出: 原流程 video_Url 就绪后 break。ncoda 的 value-producing for
+//     不允许 break（YIELD_CONTRACT），改用哨兵 "" yield + 最后 filterFirstNonEmpty，
+//     结果等价（取第一个非空视频地址），代价是就绪后最多继续轮询到 10 轮。
+
+@mode workflow
+
+import "coze-biz.feiyin_digital_human";
+
+function main(string text, string hifly_id = "", string speaker_id = "", string video_url = "") {
+    // create_lipsync_video: 提交数字人视频合成任务
+    let job = feiyin_digital_human.create_lipsync_video({
+        "hifly_id": hifly_id,
+        "speaker_id": speaker_id,
+        "text": text,
+        "video_url": video_url
+    });
+
+    // 轮询循环: 检查合成状态，video_Url 就绪即 yield 并退出；否则等 3s 再试
+    // code 轮询次数（list(range(1, 11))）→ 声明式 range(1, 11)（G15）
+    let attempts = range(1, 11);
+
+    var urls = for (round in attempts) {
+        let status = feiyin_digital_human.inspect_video_creation_status({
+            "job_id": job.job_id,
+            "hifly_id": hifly_id
+        });
+
+        if (status.video_Url != "") {
+            // 就绪: 产出视频地址（哨兵过滤后即为首个非空结果）
+            yield status.video_Url;
+        } else {
+            // 未就绪: 等待 3s 后继续下一轮（产出哨兵空串）
+            foreign code python3() -> int {
+                source `import time
+def main() -> dict:
+    time.sleep(3)
+    return {"result": 0}`;
+            };
+            yield "";
+        }
+    };
+
+    // 取第一个非空视频地址（对应原 filterFirstNonEmpty）
+    // → 声明式 first_non_empty(urls)（G15）
+    let result = first_non_empty(urls);
+
+    return result;
+}

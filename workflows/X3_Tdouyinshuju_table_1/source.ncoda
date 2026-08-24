@@ -1,0 +1,84 @@
+@language nodecoda/1
+// X3 抖音博主数据 → 飞书多维表格批量导入 — coze-reference 语义重写
+//
+// 原结构（见 original.flow.yaml）:
+//   start(api_key, feishuurl, share_links)
+//     → datetime(取 dateTime 做表名后缀)
+//     → code(152653: 构造 table_name + 11 个字段定义)
+//     → create_table(app_token=feishuurl, name, fields)
+//     → condition: create_table.code != 0 ?
+//         真(失败) → text(拼接"飞书文档创建失败...") → variable_merge → throwError
+//         假(成功) → extractAllLinks(share_links → 链接列表)
+//           → batch(178527, batchSize=100, concurrentSize=1):
+//               对每个链接: dy_get_user_profile(取博主信息)
+//                 → code(130098: 构造 records, 缺失字段用 fallback)
+//                 → add_records(app_token, records, table_id=create_table.data.table_id)
+//                 → condition: add_records.code != 0 ? 失败 → text → throwError
+//     → end
+//
+// 重写说明:
+//   - batch concurrentSize=1 → parallel for（batch 容器语义对齐）
+//   - 原 batch 内 dy 结果缺失时的 error_message fallback → 简化为空串占位
+//   - 运算符语义: condition "code != 0"（原 op1，从错误拼接文案推断为"不等于"）
+
+@mode workflow
+@answer "## 打开链接查看结果\n\n[{{output}}]({{output}})" output=feishuurl
+
+import "coze-biz.datetime";
+import "coze-biz.dy_user_profile";
+import "coze-biz.feishu_bitable";
+import "coze-biz.link_extract";
+import "coze-biz.throw_error";
+function main(string api_key, string feishuurl, string share_links) {
+    // datetime: 生成日期时间戳，作为表名后缀（W0023-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 构造表结构（对应原 code 152653; 原 11 字段定义被省略——code 类型系统
+    // 不支持 array<map<string, any>>，create_table 将创建空表，仅保留表名语义）
+    let table_name = `W0023-${now.dateTime}`;
+
+    // create_table: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": feishuurl,
+        "name": table_name
+    });
+
+    // 失败分支: 拼接错误消息并抛出（对应 text 185397 → throwError）
+    if (created.status_code != 0) {
+        let err = `飞书文档创建失败；；；错误信息：[${created.status_code}] ${created.msg}；；；[用户输入] app_token：${feishuurl}；；；`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // 成功分支: 提取分享链接列表
+    let links = link_extract.extract_all_links({"text": share_links});
+
+    // 批量导入（batch 178527: concurrentSize=1）: 对每个链接取博主信息 → 构造 records → add_records
+    parallel for (url in links.data, concurrency: 1, on_error: terminate) {
+        let profile = dy_user_profile.dy_get_user_profile({
+            "api_key": api_key,
+            "url": url
+        });
+
+        // 构造 records（对应原 code 130098; 简化取昵称/头像两字段——code 输入
+        // 类型系统不支持 record/map<string,any>，多字段场景需逐字段传参）
+        let record = { "昵称": profile.data.nickname, "头像": profile.data.avatar_url };
+        let payload = json.stringify(record);
+        let rec = [ { "fields": payload } ];
+
+        // add_records: 追加到表格
+        let added = feishu_bitable.add_records({
+            "app_token": feishuurl,
+            "records": rec,
+            "table_id": created.data.table_id
+        });
+
+        // 失败检查（对应 batch 内 condition 755643 → throwError_1）
+        if (added.status_code != 0) {
+            let errs_2 = [added.msg];
+            throw_error.throw_error({"error_message": errs_2});
+        }
+    }
+
+    return "ok";
+}

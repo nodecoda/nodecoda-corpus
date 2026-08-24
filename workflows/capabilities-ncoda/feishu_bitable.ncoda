@@ -1,0 +1,40 @@
+// feishu_bitable.ncoda — capability header (provider = file name)
+// desc: 飞书多维表格
+@language nodecoda/1
+
+type FeishuBitableAddRecordsResult = {
+  FeishuBitableAddRecordsData data;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type FeishuBitableAddRecordsData = {
+  array<any> records;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_records(string app_token, any records, string table_id = "", string table_name = "", string user_id_type = "") -> FeishuBitableAddRecordsResult {}
+type FeishuBitableCreateTableResult = {
+  FeishuBitableCreateTableData data;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type FeishuBitableCreateTableData = {
+  string default_view_id;
+
+  array<string> field_id_list;
+
+  string table_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function create_table(string app_token, string default_view_name = "", any fields = null, string name) -> FeishuBitableCreateTableResult {}

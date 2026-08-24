@@ -1,0 +1,44 @@
+// wechat_mp.ncoda — capability header (provider = file name)
+// desc: 微信公众号API
+@language nodecoda/1
+
+type WechatMpAddDraftResult = {
+  int errcode;
+
+  string errmsg;
+
+  string media_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_draft(string access_token, string author = "", string content, string digest = "", int need_open_comment = 0, string thumb_media_id, string title) -> WechatMpAddDraftResult {}
+type WechatMpAddMaterialResult = {
+  string errmsg;
+
+  string media_id;
+
+  string url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_material(string access_token, string image_url) -> WechatMpAddMaterialResult {}
+type WechatMpGetAccessTokenResult = {
+  string access_token;
+
+  string errmsg;
+
+  string msg;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function get_access_token(string appid, string appsecret) -> WechatMpGetAccessTokenResult {}
+type WechatMpPublishArticleResult = {
+  string errcode;
+
+  string errmsg;
+
+  string publish_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function publish_article(string access_token, string media_id) -> WechatMpPublishArticleResult {}

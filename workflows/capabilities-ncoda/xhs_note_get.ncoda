@@ -1,0 +1,14 @@
+// xhs_note_get.ncoda — capability header (provider = file name)
+// desc: 小红书笔记提取
+@language nodecoda/1
+
+type XhsNoteGetGetNotesResult = {
+  string content;
+
+  array<string> image_urls;
+
+  string title;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function get_notes(any url) -> XhsNoteGetGetNotesResult {}

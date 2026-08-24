@@ -1,0 +1,298 @@
+@language nodecoda/1
+// X6 大纲创作：搜索素材 → 大纲拆解 → 5 路并行创作 → 写入飞书文档
+//
+// 原结构（X6_Wdagangshuchu_word_1-draft.yaml）:
+//   start(api_key, folder_token, outline)
+//     → text(112852 搜索关键词助手) → llm_1(124516 gpt-4o 生成搜索词)
+//     → browse_1(188428 头条搜索) → data
+//     → code(120830 搜索素材清洗: 正则去链接 + 提取文本段)
+//     → text(158938 大纲创作助手) → llm(117484 claude 生成完整大纲)
+//     → llm_7(121200 gpt-4o 生成标题)
+//     → text(151907 文件名称 W0020_<标题>)
+//     → create_document(142836: folder_token, title) → code, data.token
+//     → condition(199609): code == 0 ?
+//         false → text(617035) → throwError(186296)
+//         true → code(135453 拆分任务: 正则提取 z1..z5 / p1..p5)
+//             → 5 路并行: text(100138 等 创作模板) → llm(120099 等 claude)
+//             → code(106312 字数统计: 合并 5 路字数 — 输出未被使用，死节点省略)
+//             → text(162446: 5 段空行拼接)
+//             → write_document(144768: content, document_id=create.data.token)
+//
+// 重写说明:
+//   - 5 路并行 → ncoda parallel 块（r1..r5 命名分支；v4：纯控制流 + 透明屏障）
+//   - 120830 清洗 → foreign code（正则去链接 + 非空段落编号）
+//   - 135453 拆分 → foreign code 结构化输出（{z1..z5, p1..p5} record）
+//   - 106312 字数统计为死节点（输出未参与写文档）→ 省略
+//   - 162446 拼接 → foreign code（"\n\n".join）
+//   - 112852/158938/100138 等 text 模板 → foreign code / 内嵌字符串
+
+@mode workflow
+@answer "总字数：{{output}}\n\n请打开飞书文档查看：{{url}}" output=total url=doc.data.url
+
+import "coze-biz.feishu_docs";
+import "coze-biz.throw_error";
+import "coze-biz.toutiao_search";
+import "coze-biz.wujie";
+function main(string api_key, string folder_token, string outline) {
+    // ── 搜索关键词生成（112852 → 124516）────────────────────────────
+    let kw_sys = `# 专业搜索关键词设计助手
+
+你是一位专业的搜索关键词优化专家。当用户描述他们的搜索需求时，你只需直接输出最优化的搜索关键词组合，不要添加任何解释、分析或额外内容。
+
+用户提供搜索需求后，你将仅返回可直接复制粘贴到搜索引擎的关键词或关键词组合。不要包含标题、解释、分类或其他任何文本。
+
+例如，用户询问"如何制作无糖巧克力蛋糕"，你应只回复：
+自制无糖巧克力蛋糕 配方`;
+
+    let kw = wujie.wujie({
+        "api_key": api_key,
+        "model": "gpt-4o",
+        "system_prompt": kw_sys,
+        "user_prompt": outline
+    });
+
+    // ── 头条搜索（188428）──────────────────────────────────────────
+    let page = toutiao_search.browse({
+        "url": kw.output_value
+    });
+
+    // ── 素材清洗（120830: 正则去链接 + 提取有意义的文本段）──────────
+    let cleaned = foreign code python3(string input = page.data.content) -> string {
+        source `import re
+
+def main(input: str) -> dict:
+    cleaned = re.sub(r"https?://[^\s]+", "", input or "")
+    segs = [s.strip() for s in re.split(r"[\\n\\r]+", cleaned) if s.strip()]
+    segs = [s for s in segs if len(s) > 20]
+    return {"result": " ".join(f"({i + 1}) {s}" for i, s in enumerate(segs))}`;
+    };
+
+    // ── 完整大纲（158938 → 117484, claude-3-7-sonnet）────────────────
+    let outline_sys = `# 专业文章大纲创作助手
+
+## 角色描述
+你是一位专业的文章大纲创作专家，善于针对任何领域设计结构完整的长文章大纲，并为每个部分提供详细指导。你的目标是将创作任务科学拆分为多个独立模块，便于分配给不同智能体完成。
+
+## 主要任务
+根据用户输入的内容，创建一份专业、系统、完整的文章大纲框架，遵循以下规则进行创作。
+
+## 创作规则
+1. **专业领域分析**：分析用户输入的内容所属专业领域，结合【附件资料】(如有)和你的专业知识库进行大纲设计。
+
+2. **结构划分**：将文章均衡拆分为5个主要部分，确保各部分逻辑边界清晰，内容不重叠，便于不同智能体独立创作。
+
+3. **部分规划**：为每个部分提供:
+   - 明确的标题
+   - 详细的创作指导
+   - 核心观点和必须覆盖的要点
+   - 推荐的写作风格和表达方式
+
+4. **字数分配**：
+   - 如用户指定总字数，请按比例合理分配每部分字数
+   - 如未指定字数，默认每部分1500字，总计7500字
+   - 在每部分编写要求中明确标注字数限制
+
+## 输出格式
+请严格按照以下格式输出，不要添加任何额外内容：
+
+第一部分大纲标题={第一部分大纲标题}
+第一部分编写要求={第一部分编写要求}
+
+第二部分大纲标题={第二部分大纲标题}
+第二部分编写要求={第二部分编写要求}
+
+第三部分大纲标题={第三部分大纲标题}
+第三部分编写要求={第三部分编写要求}
+
+第四部分大纲标题={第四部分大纲标题}
+第四部分编写要求={第四部分编写要求}
+
+第五部分大纲标题={第五部分大纲标题}
+第五部分编写要求={第五部分编写要求}
+
+## 附件资料
+${cleaned}`;
+
+    let plan = wujie.wujie({
+        "api_key": api_key,
+        "model": "claude-3-7-sonnet-20250219",
+        "system_prompt": outline_sys,
+        "user_prompt": outline
+    });
+
+    // ── 标题生成（121200, gpt-4o）──────────────────────────────────
+    let title = wujie.wujie({
+        "api_key": api_key,
+        "model": "gpt-4o",
+        "system_prompt": "根据大纲内容生成一条文章标题，仅输出最终标题内容，不输出除标题外的任何说明、注释、内容 之类的东西。",
+        "user_prompt": plan.output_value
+    });
+
+    // ── 文件名称（151907: W0020_<标题>）→ create_document（142836）──
+    let doc_name = `W0020_${title.output_value}`;
+
+    let doc = feishu_docs.create_document({
+        "folder_token": folder_token,
+        "title": doc_name
+    });
+
+    // 失败分支（199609 false → 617035 → 186296）
+    if (doc.status_code != 0) {
+        // G13: int() 数值转换 — 错误消息模板声明式化（原 int(status) 截断浮点状态码）
+        let err = `飞书文档创建失败，请联系客服: shuidi_tech ；；；错误信息：[${int(doc.status_code)}] ${doc.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // ── 拆分任务（135453: 正则提取 z1..z5 / p1..p5）────────────────
+    let split = foreign code python3(string input = plan.output_value) -> {
+        z1: string; p1: string; z2: string; p2: string; z3: string; p3: string;
+        z4: string; p4: string; z5: string; p5: string;
+    } {
+        source `import re
+
+def extract(input: str, keyword: str) -> str:
+    m = re.search(keyword + r"\\s*[:=：]\\s*(\\{?)([^\\n\\}]+)(\\}?)", input or "")
+    return m.group(2).strip() if m else ""
+
+def main(input: str) -> dict:
+    return {
+        "z1": extract(input, "第一部分大纲标题"), "p1": extract(input, "第一部分编写要求"),
+        "z2": extract(input, "第二部分大纲标题"), "p2": extract(input, "第二部分编写要求"),
+        "z3": extract(input, "第三部分大纲标题"), "p3": extract(input, "第三部分编写要求"),
+        "z4": extract(input, "第四部分大纲标题"), "p4": extract(input, "第四部分编写要求"),
+        "z5": extract(input, "第五部分大纲标题"), "p5": extract(input, "第五部分编写要求"),
+    }`;
+    };
+
+    // ── 5 路并行创作（100138..1964891 模板 → llm_2..llm_6 claude）──
+    parallel {
+        r1: {
+            let sys1 = `##角色：你是一个专业的文章创作智能体，你尤其善于分工合作，根据大纲的要求，创作其中一个部分的内容，同时保证兼顾整个大纲，做到和其他部分能够融合自然以及没有冲突。
+
+##任务：请你首先参考【完整大纲】的内容，然后针对其中的【第1部分标题】进行创作这一部分的完整文章内容，并在创作的时候严格遵守下面的规则要求。
+
+##规则：
+1. 请你在针对【第1部分标题】创作完整文章的时候，严格按照【第1部分要求】的内容进行，尤其注意字数要求。
+2. 请你在创作过程中，分析文章具体属于哪一个专业领域，并且调用你的专业知识进行创作，保证内容的专业性和严谨性。
+3. 确保你创作的内容与大纲中的其他部分保持逻辑连贯性，避免重复或矛盾。
+4. 在创作时考虑文章的整体风格和语言特点，保持一致性。
+5. 如有需要，请根据主题适当引入专业术语、案例或数据支持你的论点。
+
+##【第1部分标题】=${split.z1}
+##【第1部分要求】=${split.p1}
+##【完整大纲】=${plan.output_value}`;
+            let out1 = wujie.wujie({
+                "api_key": api_key,
+                "model": "claude-3-7-sonnet-20250219",
+                "user_prompt": sys1
+            });
+            
+        }
+        r2: {
+            let sys2 = `##角色：你是一个专业的文章创作智能体，你尤其善于分工合作，根据大纲的要求，创作其中一个部分的内容，同时保证兼顾整个大纲，做到和其他部分能够融合自然以及没有冲突。
+
+##任务：请你首先参考【完整大纲】的内容，然后针对其中的【第2部分标题】进行创作这一部分的完整文章内容，并在创作的时候严格遵守下面的规则要求。
+
+##规则：
+1. 请你在针对【第2部分标题】创作完整文章的时候，严格按照【第2部分要求】的内容进行，尤其注意字数要求。
+2. 请你在创作过程中，分析文章具体属于哪一个专业领域，并且调用你的专业知识进行创作，保证内容的专业性和严谨性。
+3. 确保你创作的内容与大纲中的其他部分保持逻辑连贯性，避免重复或矛盾。
+4. 在创作时考虑文章的整体风格和语言特点，保持一致性。
+5. 如有需要，请根据主题适当引入专业术语、案例或数据支持你的论点。
+
+##【第2部分标题】=${split.z2}
+##【第2部分要求】=${split.p2}
+##【完整大纲】=${plan.output_value}`;
+            let out2 = wujie.wujie({
+                "api_key": api_key,
+                "model": "claude-3-7-sonnet-20250219",
+                "user_prompt": sys2
+            });
+            
+        }
+        r3: {
+            let sys3 = `##角色：你是一个专业的文章创作智能体，你尤其善于分工合作，根据大纲的要求，创作其中一个部分的内容，同时保证兼顾整个大纲，做到和其他部分能够融合自然以及没有冲突。
+
+##任务：请你首先参考【完整大纲】的内容，然后针对其中的【第3部分标题】进行创作这一部分的完整文章内容，并在创作的时候严格遵守下面的规则要求。
+
+##规则：
+1. 请你在针对【第3部分标题】创作完整文章的时候，严格按照【第3部分要求】的内容进行，尤其注意字数要求。
+2. 请你在创作过程中，分析文章具体属于哪一个专业领域，并且调用你的专业知识进行创作，保证内容的专业性和严谨性。
+3. 确保你创作的内容与大纲中的其他部分保持逻辑连贯性，避免重复或矛盾。
+4. 在创作时考虑文章的整体风格和语言特点，保持一致性。
+5. 如有需要，请根据主题适当引入专业术语、案例或数据支持你的论点。
+
+##【第3部分标题】=${split.z3}
+##【第3部分要求】=${split.p3}
+##【完整大纲】=${plan.output_value}`;
+            let out3 = wujie.wujie({
+                "api_key": api_key,
+                "model": "claude-3-7-sonnet-20250219",
+                "user_prompt": sys3
+            });
+            
+        }
+        r4: {
+            let sys4 = `##角色：你是一个专业的文章创作智能体，你尤其善于分工合作，根据大纲的要求，创作其中一个部分的内容，同时保证兼顾整个大纲，做到和其他部分能够融合自然以及没有冲突。
+
+##任务：请你首先参考【完整大纲】的内容，然后针对其中的【第4部分标题】进行创作这一部分的完整文章内容，并在创作的时候严格遵守下面的规则要求。
+
+##规则：
+1. 请你在针对【第4部分标题】创作完整文章的时候，严格按照【第4部分要求】的内容进行，尤其注意字数要求。
+2. 请你在创作过程中，分析文章具体属于哪一个专业领域，并且调用你的专业知识进行创作，保证内容的专业性和严谨性。
+3. 确保你创作的内容与大纲中的其他部分保持逻辑连贯性，避免重复或矛盾。
+4. 在创作时考虑文章的整体风格和语言特点，保持一致性。
+5. 如有需要，请根据主题适当引入专业术语、案例或数据支持你的论点。
+
+##【第4部分标题】=${split.z4}
+##【第4部分要求】=${split.p4}
+##【完整大纲】=${plan.output_value}`;
+            let out4 = wujie.wujie({
+                "api_key": api_key,
+                "model": "claude-3-7-sonnet-20250219",
+                "user_prompt": sys4
+            });
+            
+        }
+        r5: {
+            let sys5 = `##角色：你是一个专业的文章创作智能体，你尤其善于分工合作，根据大纲的要求，创作其中一个部分的内容，同时保证兼顾整个大纲，做到和其他部分能够融合自然以及没有冲突。
+
+##任务：请你首先参考【完整大纲】的内容，然后针对其中的【第5部分标题】进行创作这一部分的完整文章内容，并在创作的时候严格遵守下面的规则要求。
+
+##规则：
+1. 请你在针对【第5部分标题】创作完整文章的时候，严格按照【第5部分要求】的内容进行，尤其注意字数要求。
+2. 请你在创作过程中，分析文章具体属于哪一个专业领域，并且调用你的专业知识进行创作，保证内容的专业性和严谨性。
+3. 确保你创作的内容与大纲中的其他部分保持逻辑连贯性，避免重复或矛盾。
+4. 在创作时考虑文章的整体风格和语言特点，保持一致性。
+5. 如有需要，请根据主题适当引入专业术语、案例或数据支持你的论点。
+
+##【第5部分标题】=${split.z5}
+##【第5部分要求】=${split.p5}
+##【完整大纲】=${plan.output_value}`;
+            let out5 = wujie.wujie({
+                "api_key": api_key,
+                "model": "claude-3-7-sonnet-20250219",
+                "user_prompt": sys5
+            });
+            
+        }
+    };
+
+    // ── 拼接（162446: 5 段空行分隔）→ write_document（144768）──────
+    let content = join([out1.output_value, out2.output_value, out3.output_value, out4.output_value, out5.output_value], "\n");
+
+    // 总字数（原 106312 合并 5 路字数 → @answer 的 {{output}} 绑定）：
+    // len 内建只接受数组，字数统计用 foreign code 复刻原 python 计数节点
+    let total = foreign code python3(string input = content) -> int {
+        source `def main(input: str) -> dict:
+    return {"result": len(input)}`;
+    };
+
+    feishu_docs.write_document({
+        "content": content,
+        "document_id": doc.data.token
+    });
+
+    return doc.data.url;
+}

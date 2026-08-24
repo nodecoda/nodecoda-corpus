@@ -1,0 +1,112 @@
+// capcut_video_compose.ncoda — capability header (provider = file name)
+// desc: 视频合成_剪映小助手
+@language nodecoda/1
+
+type CapcutVideoComposeAddAudiosResult = {
+  array<string> audio_ids;
+
+  string draft_url;
+
+  string track_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_audios(any audio_infos, any draft_url) -> CapcutVideoComposeAddAudiosResult {}
+type CapcutVideoComposeAddCaptionsResult = {
+  string draft_url;
+
+  array<any> outputList;
+
+  array<string> segment_ids;
+
+  array<any> segment_infos;
+
+  array<string> text_ids;
+
+  string track_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_captions(int alignment = 0, any alpha = 1, any border_color = "", any captions, any draft_url, any font = "", any font_size = 6, float letter_spacing = 0, float line_spacing = 0, float scale_x = 0, float scale_y = 0, int style_text = 0, any text_color = "", any transform_x = 0, any transform_y = 0) -> CapcutVideoComposeAddCaptionsResult {}
+type CapcutVideoComposeAddImagesResult = {
+  string draft_url;
+
+  array<string> image_ids;
+
+  array<string> segment_ids;
+
+  array<any> segment_infos;
+
+  string track_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_images(any alpha = 1, any draft_url, any image_infos, any scale_x = 1, any scale_y = 1, any transform_x = 0, any transform_y = 0) -> CapcutVideoComposeAddImagesResult {}
+type CapcutVideoComposeAddVideosResult = {
+  string draft_url;
+
+  array<string> segment_ids;
+
+  string track_id;
+
+  array<string> video_ids;
+};
+
+@capability retry=true, failure_branch=true, timeout_ms=180000
+function add_videos(any draft_url, any video_infos) -> CapcutVideoComposeAddVideosResult {}
+type CapcutVideoComposeCreateDraftResult = {
+  string draft_url;
+
+  string tip_url;
+};
+
+@capability retry=true, failure_branch=true, timeout_ms=180000
+function create_draft(any height, int user_id = 0, any width) -> CapcutVideoComposeCreateDraftResult {}
+type CapcutVideoComposeSaveDraftResult = {
+  string draft_url;
+
+  string message;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function save_draft(any draft_url, int user_id = 0) -> CapcutVideoComposeSaveDraftResult {}
+type CapcutVideoComposeAddKeyframesResult = {
+  string draft_url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_keyframes(any draft_url, any keyframes) -> CapcutVideoComposeAddKeyframesResult {}
+type CapcutVideoComposeAddEffectsResult = {
+  string draft_url;
+
+  array<string> effect_ids;
+
+  array<string> segment_ids;
+
+  string track_id;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_effects(any draft_url, any effect_infos) -> CapcutVideoComposeAddEffectsResult {}
+type CapcutVideoComposeGetAudioDurationResult = {
+  int duration;
+
+  string message;
+
+  array<any> outputList;
+};
+
+@capability retry=true, failure_branch=true, timeout_ms=180000
+function get_audio_duration(any mp3_url) -> CapcutVideoComposeGetAudioDurationResult {}
+type CapcutVideoComposeAddStickerResult = {
+  string draft_url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_sticker(any draft_url, any end, any scale = 1, any start, any sticker_id, any transform_x = 0, any transform_y = 0) -> CapcutVideoComposeAddStickerResult {}
+type CapcutVideoComposeAddMasksResult = {
+  string draft_url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function add_masks(any X = 0, any Y = 0, any draft_url, any height = 540, any name, any segment_ids, any width = 899) -> CapcutVideoComposeAddMasksResult {}

@@ -1,0 +1,265 @@
+@language nodecoda/1
+// X23 批量提取文案 → 润色 → 写标题 → 配音 → 写入飞书多维表格 — coze-reference 语义重写
+//
+// 原结构（X23_Tpiliang_table_2_1-draft.yaml）:
+//   start(api_key, app_token, share_links)
+//     → datetime → code(152653: table_name=`W0006-${dateTime}` + fields[链接/标题/封面/原内容/润色后内容1-3/润色后标题1-3/配音1-3])
+//     → create_table → condition code=0 ? 失败 → text(617035) → throwError
+//     → 成功 → String2Array(share_links) → data(array<string>)
+//     → batch(170020, batchSize=100, concurrentSize=1, 每元素=分享链接):
+//         parse_video(share_link) → condition code=0 ?
+//           false → 错误文案 → 汇入 merge（仍入表）
+//           true → voice_to_text(data.video) → data
+//             → condition data 非空 ? → content_check(文案) → output
+//                 → condition output 非空 ?
+//                     true → llm(197575, claude: 润色+标题, sys=119540) → llm_1(128769, gpt-4o-mini: JSON修复)
+//                         → code(162704: 解析 JSON → new_content_1/2/3 + new_title_1/2/3)
+//                         → speech_synthesis ×3 (配音 new_content_1/2/3, 各带失败检查)
+//                     false → text(文案矫正失败) → 汇入 merge
+//                 → (data 空) 错误文案 → 汇入 merge
+//         → code(289556: records=[{链接, 标题, 封面, 原内容, 润色后内容1-3, 润色后标题1-3, 配音1-3}])
+//         → add_records → condition code=0 ? 继续 : text(728616) → throwError
+//     → end(静态文本)
+//
+// 重写说明:
+//   - batch concurrentSize=1 → parallel for（batch 容器语义对齐）
+//   - 原 code 162704（JSON 列表 → 6 字段）用 foreign code 复刻
+//   - 配音 = speech_synthesis 的 data.link（原 merge 的 audio 字段）
+//   - tts 失败分支简化为空串（原为错误文案汇入后仍入表）
+//   - code 152653 的 fields 定义省略
+
+@mode workflow
+@answer "结果输出到了填入的多维表格中，表格左侧会增加一个数据表，点进去查看"
+
+// X23Item: code 162704 解析出的 JSON 列表元素（润色内容/标题，G12-2 数组元素访问）
+type X23Item = {
+    string content;
+    string title;
+};
+
+// add_record: 构造 records 并追加到表格（对应原 batch 内 code 289556 → add_records → 失败检查）
+import "coze-biz.copy_check";
+import "coze-biz.datetime";
+import "coze-biz.feishu_bitable";
+import "coze-biz.string_to_array";
+import "coze-biz.throw_error";
+import "coze-biz.tts";
+import "coze-biz.video_asr";
+import "coze-biz.video_parse";
+import "coze-biz.wujie";
+function add_record(string app_token, string table_id, string? link, string? title, string? cover,
+                    string? content, string? nc1, string? nc2, string? nc3,
+                    string? nt1, string? nt2, string? nt3, string? a1, string? a2, string? a3) {
+    // G8 声明式改写（替代 json.dumps foreign code）:
+    // coalesce 默认值 → record 构造 shim；json.stringify → coze 原生 type-58
+    // 序列化节点（dify 保持 code）；[{"fields": payload}] → fields 包装 shim。
+    let record = { "链接": coalesce(link, ""), "标题": coalesce(title, ""), "封面": coalesce(cover, ""), "原内容": coalesce(content, ""), "润色后内容1": coalesce(nc1, ""), "润色后内容2": coalesce(nc2, ""), "润色后内容3": coalesce(nc3, ""), "润色后标题1": coalesce(nt1, ""), "润色后标题2": coalesce(nt2, ""), "润色后标题3": coalesce(nt3, ""), "配音1": coalesce(a1, ""), "配音2": coalesce(a2, ""), "配音3": coalesce(a3, "") };
+    let payload = json.stringify(record);
+    let rec = [ { "fields": payload } ];
+
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": rec,
+        "table_id": table_id
+    });
+
+    // 失败检查（原 condition 755643 → text 728616 → throwError）
+    if (added.status_code != 0) {
+        let err = `多维表格数据表中添加数据失败，请联系客服: shuidi_tech ；；；错误信息：[${added.status_code}] ${added.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+}
+
+function main(string api_key, string app_token, string share_links) {
+    // datetime: 表名后缀（W0006-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 构造表名（对应原 code 152653; 原 13 字段定义省略）
+    let table_name = `W0006-${now.dateTime}`;
+
+    // create_table: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支: 创建失败 → 拼接错误消息并抛出（text 617035 → throwError）
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败 ；；；错误信息：[${created.status_code}] ${created.msg}；；；请联系客服: shuidi_tech`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // 成功分支: 分享链接文本 → 链接数组
+    let links = string_to_array.string_2_array({"content": share_links});
+
+    // 批量处理（batch 170020: concurrentSize=1）: 对每个链接 解析 → 文案(校对) → 润色/标题 → 配音 → 写入表格
+    parallel for (link in links.data, concurrency: 1, on_error: terminate) {
+        // parse_video: 解析视频 → 标题/封面/视频地址
+        let v = video_parse.parse_video({
+            "api_key": api_key,
+            "share_link": link
+        });
+
+        if (v.status_code == 0) {
+            // voice_to_text: 视频语音转文案（原 115986 成功分支）
+            let asr = video_asr.voice_to_text({
+                "api_key": api_key,
+                "file_url": v.data.video
+            });
+
+            if (asr.data != "") {
+                // content_check: 文案校对（原 149417 → 174554）
+                let checked = copy_check.content_check({
+                    "api_key": api_key,
+                    "user_prompt": asr.data,
+                    "model": "gpt-4o-mini"
+                });
+
+                if (checked.output_value != "") {
+                    // ── 润色+标题（原 197575, claude-3-7-sonnet, sys=119540）──
+                    let polished = wujie.wujie({
+                        "api_key": api_key,
+                        "model": "claude-3-7-sonnet-20250219",
+                        "system_prompt": `## 角色(Role):
+你是一位经验丰富的短视频内容创作专家，擅长对原有文案进行优化润色并创建吸引人的标题。你熟悉各种写作技巧，能够灵活运用生动具象的语言，并善于融合流行的短语和短句，传递有价值的信息，同时保持内容的真实性和可信度。
+
+## 背景(Background):
+在短视频平台蓬勃发展的时代，高质量的文案和吸引眼球的标题是吸引用户注意力的关键因素。虽然原创文案重要，但基于现有内容的二次创作和润色同样价值巨大。创作者需要能在保留原意的同时，为内容注入新鲜感和吸引力，并配以引人点击的标题，平衡创意表达与核心信息传递。最重要的是，文案和标题必须保持人类写作的自然感，避免机械化、公式化的AI痕迹。
+
+## 任务(Task):
+1. 针对用户提供的原始文案进行创新性润色和修改。保留原文案核心信息的同时，使用更丰富多样的表达方式，对至少30%的内容进行改写。恰当地植入"钩子"吸引读者。
+2. 为每个润色后的文案创建一个有吸引力的标题，标题需要控制在40字以内，并包含2-4个相关标签。
+
+## 写作原则(Writing Principles):
+1. 用相对具体但不过分精确的描述代替模糊表达
+2. 创造可视化场景：让读者能在脑中"看到"你描述的内容
+3. 传递有价值信息：每句话都应带有实质性内容，避免空洞修饰
+4. 统一语气和节奏：确保整体风格连贯，符合目标受众的阅读习惯
+5. 平衡吸引力与真实性：使用引人注目的表达但不夸大或误导
+6. **完全避免AI特征**：避免过于完美的结构、过度平衡的论点和机械化的表达模式
+
+## 去除AI痕迹的关键原则:
+1. **增加语气词和口语化表达**：适当使用"啊"、"哎"、"嗯"等语气词，展现人类说话的随意性
+2. **故意加入小瑕疵**：偶尔使用重复词、口头禅或不完美的转折，模拟人类自然说话
+3. **情感波动**：文案中表现出明显的情绪起伏，而非始终保持中性客观
+4. **避免完美对称**：不要让每个段落长度相似，不要使用过于规整的结构
+5. **打破公式**：避免机械地遵循"问题-解决方案-益处"等固定公式
+6. **使用独特比喻**：创造新鲜、有时甚至有些奇怪的比喻，而非常见比喻
+7. **加入个人风格**：模拟特定的写作风格，如幽默、犀利或热情洋溢
+8. **使用模糊量词**：使用"很多"、"不少"、"好几倍"等模糊表达，避免过于精确的数字
+
+## 参考钩子短语:
+真实太刺激了、如此xxx、你可能会好奇xxx、她靠这个小秘诀、秘诀就在于xxx、你可能不信、打死也不要、这才叫xxx、就千万不要做、什么意思啊？、千万不要做、发现一个xxx、其实也是xxx、什么样的xxx,可以xxx?、只能说明xxx、其实只需要xxx、如果你想学会xxx、怎么样做出xxx、只需xxx、我强烈推荐你用xxx、想知道怎么做？关注我、其实为什么啊？、如果你觉得不可思议、说句不夸张的、省钱、立刻、重磅消息、速看！、真相大白、前所未见、超震撼、注意了！、你绝对不知道、必看、绝招、必掌握、必学、必知、必读、必体验、速看、速学、难道xxx、岂xxx、合集、实用、冷门好用、XX攻略、我宣布后悔、别再xx、干货、你不会相信xxx、如何打造xxx、适合零基础、流量密码、惊到了、吹爆、新手小白、带你、沉浸式、懒人必备、不允许你不知道还可以这样、我想问一下、花xx年时间，总结出xx款必备的xxx、我研究了xxx，发现xxx原来这样xxx、超详细教程、秒变xxx、告别焦虑、书单、吐血整理一定要看到最后、0基础谁为你00后80后职场、揭秘、太可怕了吧、终于能xxx、花了一年时间，总结出xxx、是不是超级简单、来看一下效果、我只做xxx、真的是这样？、我只做了一个动作、听说你xxx、如果你还在xxx、不是因为xxx,而是因为xxx、突然感觉XXX、分享xxx个xxx、我从来没xxx、极大的xxx、我简直惊呆了、xxx又放王炸了、它就是xxx、瞬间、真的是这样？、学会这几点、你将获得、只需三步、何尝xxx、何必xxx、另外、难怪xxx、不需要你再xxx、吊打之前xxx、是什么xxx让xxx、更强的是xxx、有了他xxx、无缝融入、他只用了十几秒xxxx、再也不怕xxx、真炸裂、xxx是什么样的体验?、又杀出来一个变态的东西、怎么样，学会了吗？、给大家汇报一个好消息、夸张的是、让我感受到了xxx、依旧霸道、短短一年、注意了、你还可以、这个叫xxx可以xxx、他只用了xxx、结果大跌眼镜、这只是xxx、有任何问题欢迎留言、你猜会怎么样？、哇，这个xxx太强了，必须要分享给你们。、你绝对想不到xxx、我又发现了xxx、赶紧来分享给你、太扎心了、是不是很xxx、为什么、看到没、出大事了、仔细看、关键是xxx、有一个有意思的事、简单理解就是xxx、你只需xxx、你会觉得xxx、除了帮你xxx，还能xxx、居然xxx、现在几乎xxx、就可以帮你xxx、而这一切xxxx、接下来这个xxx、连xxx都要"失业"了吗？、竟然xxx、只要稍微xxx、再也不用xxx、你相信xxx、这是刷爆朋友圈的xxx、最恐怖的是这里、看看它究竟有多恐怖、究竟xxx、看到xxx了吗？、如何用xxx、这是最近唯一一个让我汗毛树立的xxx、无法想象xxx、是否会影响xxx、注意看、你准备好xxx、他甚至xxx、太不可思议了!、自从用了xxx,、你们知道吗,xxx、你可能无法想象xxx、这简直就是xxxx!、我最近一直在使用这个xxx、前两天,xxxx、可能被颠覆、开来以后xxx、没有xxx的xxx你见过吗？、太贴心了!、xxx是人类迄今为止xxx、这是一个让你无法拒绝xxx、无疑是xxx、据说xxx、效率实在太高了xxx、听说最近xxx、完全没有想到xxx、即使你无法相信、就在xxx、不仅可以xxx,还xxx、你们一定不敢相信,xxx、以后不会存xxx、万万没想到xxx、最后结局亮了、刚刚发生、首次公开、更让人吃惊的是、说实话xxxx、终于来了、你以为这就结束了？、我真的非常期待、还有xxx、不过最让我震惊的还是这个功能、只有我们想不到xxx、一觉醒来xxx、给你们看一个厉害的东西，.、简直太神奇了、简直太xxx、教你xxx、手把手教你、不走弯路、xxx啥时候变得这么好用了、但我是真没想到....、他竟然可以xxx、这可是xxx、没想到xxxx、遥遥领先了、话不多说、就在刚刚xxx、我不知道这意味着什么、不仅xxx，还拥有xxx、重新定义了、不得不服、值得所有人关注的、又一次证明了、终于等到了、终极指南、工具集、令人破防、刷新了我的认知、你注意到没有？xxx、来看看xxx、为什么xxx、我真正太生气了、我受不了了、你看，xxx、而几乎xxx、这一切都要归功于xxx、彻底完结了、兄弟们，让我给你讲个xxx、xxxx保姆级教程来了、你是不是xxx、xxx,是一种什么体验？、我想挑战xxx、踩中风口 真的会翻身吗、传统行业怎么做、以后xxx都要被淘汰了？、xxx,不可能，太xxx！、不扯淡，我们直接分享干货。、你看这个xxx、我刚刚发现了xx、把我干废了、一天发xxx条、这才是xxx、每天xxx、xxx个人团队就能xxx、不用xxx,更不用xxx、唯一要做的就是xxx、快速xxx、不需要xxx,也不需要xxx、这种xxx,谁先做谁先xxx、不要再xxx了、就会有xxx、你们有没有发现、你敢信吗？、特别是...、想要xxx、就会有xxx、全都是xxx、不需要xxx,也不需要xxx、不用xxx,更不用xxx、唯一要做的就是xxx、这才是xxx、你是不是xxx你看，xxx、看看xxxx值不值？、来看看xxx、为什么xxx、我真正太生气了、我受不了了、竟然改变xxx、没想到xxxx、说实话xxxx、他竟然可以xxx、但我是真没想到....、这简直就是xxxx、他甚至xxx、你绝对想不到xxx、零基础，想学xxx、我一定是xxx、一定不要xxx、快速掌握、零基础入门、实战技巧
+
+## 规则与限制(Rules & Restrictions):
+1. 修改润色后的文案必须与原文案核心意思完全一致
+2. 须对原文案至少30%的内容进行改写润色
+3. 必须从参考钩子短语列表中选取并自然融入表达
+4. 不使用任何不当、违法或冒犯性词语
+5. 润色后的文案长度应为原文的80%-120%之间
+6. 保持句式多样，避免连续使用相似结构
+7. 确保钩子的植入自然流畅，不生硬突兀
+8. **绝对避免完美对称、过度平衡和机械化的AI特征**
+9. **加入适当的口语化表达和不完美元素**
+10. **避免使用过于精确的数字和统计数据**
+11. 每个标题控制在40字以内，并包含2-4个相关标签(标签前加#号)
+12. 标题必须紧扣视频内容，不能脱离主题或故意欺骗
+13. 标题必须从参考钩子短语中选取并自然融入
+
+## 输出格式(Output format):
+直接输出3个具有标题和内容的版本，以JSON数组格式呈现，不要使用代码块包裹，确保内容中的双引号被正确转义：
+
+[
+  {
+    "title": "标题1 #标签1 #标签2 #标签3",
+    "content": "润色后的文案1（内容中的双引号需要转义为\"）"
+  },
+  {
+    "title": "标题2 #标签1 #标签2 #标签3",
+    "content": "润色后的文案2（内容中的双引号需要转义为\"）"
+  },
+  {
+    "title": "标题3 #标签1 #标签2 #标签3",
+    "content": "润色后的文案3（内容中的双引号需要转义为\"）"
+  }
+]
+
+注意：
+1. 内容中的所有双引号(")必须转义为(\")
+2. 内容中的所有反斜杠(\)必须转义为(\\)
+3. 内容中的所有制表符必须转义为(\t)
+4. 内容中的所有换行符必须转义为(\n)
+5. 不要使用代码块包裹，确保最终输出的是有效的JSON格式，可以被JSON解析器正确解析
+
+## 工作流程(Workflows):
+1. 仔细分析原始文案，提取核心信息和主要卖点
+2. 选择合适的参考短语，规划在文案中的钩子分布位置
+3. 改写原文案，注重:
+   - 将抽象描述转为生动但不过分精确的表达
+   - 增加生动形象的表达
+   - 确保信息的有价值性
+   - 加入人类写作的随意性和情感特征
+4. 为每个润色后的文案创建一个吸引人的标题，并添加2-4个相关标签
+5. 检查修改后的内容确保:
+   - 与原意一致
+   - 钩子植入自然
+   - 长度适中
+   - 风格统一
+   - 没有明显的AI痕迹
+6. 刻意引入一些微小的不规则性，确保文案有"人味"
+7. 生成3个不同风格但都具有明显人类特征的完整版本(含标题和内容)
+
+## 初始化(Initialization):
+准备好接收用户的原始文案，将直接输出3个精心润色且充满人类特色的版本(包含标题和内容)，以JSON格式呈现，不使用代码块包裹，不会添加任何额外解释。让我们一起创作能够吸引用户、传递价值、完全没有AI痕迹的优质短视频文案！`,
+                        "user_prompt": checked.output_value
+                    });
+
+                    // JSON 修复（原 128769, gpt-4o-mini）
+                    let fixed = wujie.wujie({
+                        "api_key": api_key,
+                        "model": "gpt-4o-mini",
+                        "system_prompt": `检查用户输入是否符合标准JSON格式。若不符合，仅修正JSON语法和格式错误后直接返回修正后的JSON。若已是有效JSON，则直接返回原JSON。不添加任何说明、注释、代码块、或其他非JSON内容，响应中只包含JSON本身。`,
+                        "user_prompt": polished.output_value
+                    });
+
+                    // 解析 JSON 列表 → 润色内容/标题 ×3（对应原 code 162704; G12-2 数组元素访问：
+                    // json.parse<array<X23Item>> + 常量索引提取 shim，越界兜底由 shim 的
+                    // `items[i] if len(items) > i else {}` 保持）
+                    let items = json.parse<array<X23Item>>(fixed.output_value);
+                    let nc1 = items[0].content;
+                    let nc2 = items[1].content;
+                    let nc3 = items[2].content;
+                    let nt1 = items[0].title;
+                    let nt2 = items[1].title;
+                    let nt3 = items[2].title;
+
+                    // ── 配音 ×3（原 165431/191383/185429, text=new_content_1/2/3）──
+                    let a1 = tts.speech_synthesis({"text": nc1});
+                    let a2 = tts.speech_synthesis({"text": nc2});
+                    let a3 = tts.speech_synthesis({"text": nc3});
+
+                    add_record(app_token, created.data.table_id, link, v.data.title, v.data.cover,
+                        checked.output_value, nc1, nc2, nc3,
+                        nt1, nt2, nt3,
+                        a1.data.link, a2.data.link, a3.data.link);
+                } else {
+                    // 文案矫正失败 → 仍入表（原 text 179466）
+                    add_record(app_token, created.data.table_id, link, v.data.title, v.data.cover,
+                        "文案矫正失败，请联系客服微信: shuidi_tech", "", "", "", "", "", "", "", "", "");
+                }
+            } else {
+                // 文案为空 → 仍入表（原 149417 false 分支）
+                add_record(app_token, created.data.table_id, link, v.data.title, v.data.cover,
+                    "", "", "", "", "", "", "", "", "", "");
+            }
+        } else {
+            // 解析失败仍入表（原 115986 false 分支），字段为空
+            add_record(app_token, created.data.table_id, link, "", "", "", "", "", "", "", "", "", "", "", "");
+        }
+    }
+
+    // end 静态文案
+    return "结果输出到了填入的多维表格中，表格左侧会增加一个数据表，点进去查看";
+}

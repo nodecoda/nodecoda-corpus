@@ -1,0 +1,16 @@
+// drawing_board.ncoda — capability header (provider = file name)
+// desc: 画板排版（coze-biz 内置节点;canvasSchema 自由 JSON 透传）
+// P1 内置节点通道: 绑定表 node_type=drawing_board,渲染平台原生画板节点。
+// canvas_schema 为静态 JSON 字面量（对齐语料 109/109 literal）;variables
+// map 的键 = 画布变量名（customVariableRefs.variableName）,值 = 数据流 ref
+// 或字面量 → node_inputs 绑定。
+@language nodecoda/1
+
+type DrawingBoardRenderResult = {
+  file data;
+
+  string msg;
+};
+
+@capability failure_branch=true, timeout_ms=600000
+function render(string canvas_schema, map<string, any> variables) -> DrawingBoardRenderResult {}

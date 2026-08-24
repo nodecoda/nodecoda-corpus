@@ -1,0 +1,40 @@
+@language nodecoda/1
+// x001 双 LLM 并行 → 变量聚合 → 返回 — coze-reference 语义重写
+//
+// 原结构（x001-draft.yaml）:
+//   start(input)
+//     → llm(190648, 豆包·1.8·深度思考, prompt="ssssss{{input}}")  输出 vvvv / ooo.k1
+//     → llm(197635, 豆包·1.8·深度思考)                            输出 ppp / output
+//     → variable_merge: Group1 = [vvvv, ppp, "a","b","c"]（list 聚合）
+//       Group2 = [ooo.k1, output]（标量聚合，end 未用）
+//     → end(output = Group1)
+//
+// 重写说明:
+//   - 两路 llm 从 start 并行 → 语句级 parallel（命名分支，透明屏障）
+//   - 数组 = 位置语义（作者定序），parallel 不产生集合值；
+//     Group1 聚合 = 数组字面量 [x1.text, x2.text, ...]；Group2 未进 end，省略
+
+@mode workflow
+
+function main(string input = "") -> array<string> {
+    parallel {
+        r1: {
+            let x1 = llm("豆包·1.8·深度思考", {
+                "temperature": 0.5,
+                "top_p": 1,
+                "max_tokens": 4096,
+                "timeout_ms": 180000,
+                "messages": [ { "role": "user", "content": "ssssss" + input } ]
+            });
+        }
+        r2: {
+            let x2 = llm("豆包·1.8·深度思考", {
+                "temperature": 0.5,
+                "top_p": 1,
+                "max_tokens": 4096,
+                "timeout_ms": 180000
+            });
+        }
+    };
+    return [x1.text, x2.text, "a", "b", "c"];
+}

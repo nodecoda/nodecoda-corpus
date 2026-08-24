@@ -1,0 +1,103 @@
+@language nodecoda/1
+// X16 提取小红书图文笔记中图集里面的文字内容 → 写入飞书多维表格
+//
+// 原结构（X16_W_tiquwenzi_word_1-draft.yaml）:
+//   start(app_token, share_link)
+//     → datetime(158963) → dateTime
+//     → code(152653: table_name=`W0018-${dateTime}` + fields[图片链接/图片中文字])
+//     → create_table(160311: app_token, name, fields) → code, data.table_id
+//     → condition(198633): code == 0 ?
+//         false(失败) → text(617035) → merge(198728) → throwError(186296)
+//         true(成功) → get_notes(169003: url=share_link) → image_urls(array<string>)
+//             → batch(182325: batchSize=100, concurrentSize=10, input=image_urls)
+//                 内部节点(137973): 每图 → {img_url, img_text}（文字提取，未导出）
+//             → code(289556: content.map → records: {图片链接, 图片中文字})
+//             → add_records(105492: app_token, records, table_id) → code
+//             → condition(755643): code == 0 ?
+//                 true → code(111445: app_token 去 query + ?table=table_id) → end
+//                 false → text(728616) → merge(198728) → throwError
+//
+// 重写说明:
+//   - batch concurrentSize=10 并行 → parallel for（batch 容器语义对齐）
+//   - batch 内部节点未在导出中；依工作流标题（提取图集文字）与输出
+//     {img_url, img_text}；batch 内实据: general_ocr(143220) → code(110057
+//     line_texts.join('\n')) → merge(137973)
+//   - add_records 从"一次性批量"降级为逐条追加（同 X4 族 for 模式；
+//     语义等价：每条记录最终都进表）
+//   - code 152653 的 fields 定义省略（同 X3 族）；create_table 仅表名
+//   - code 111445 url 拼接用 foreign code 复刻
+
+@mode workflow
+@answer "{{output}}" output=url
+
+// add_img_record: OCR 提取单图文字并追加到表格（对应 batch 内部 137973 + code 289556 + add_records）
+import "coze-biz.datetime";
+import "coze-biz.feishu_bitable";
+import "coze-biz.ocr_volcano";
+import "coze-biz.throw_error";
+import "coze-biz.xhs_note_get";
+function add_img_record(string app_token, string table_id, string img_url) {
+    // 逐图 OCR（原 batch 内部节点 143220 → general_ocr，输出 line_texts）
+    let ocr_result = ocr_volcano.general_ocr({"url": img_url});
+
+    // 文字拼接（原 code 110057: line_texts.join('\n') → img_text）
+    let text = foreign code python3(array<string> lines = ocr_result.data.line_texts) -> string {
+        source `def main(lines: list) -> dict:
+    return {"result": chr(10).join(lines or [])}`;
+    };
+
+    // records 构造（对应 code 289556: fields JSON）
+    let record = { "图片链接": img_url, "图片中文字": text };
+    let payload = json.stringify(record);
+    let rec = [ { "fields": payload } ];
+
+    // add_records: 逐条追加
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": rec,
+        "table_id": table_id
+    });
+
+    // 失败分支: 添加失败 → text 728616 → throwError
+    if (added.status_code != 0) {
+        let err = `多维表格数据表中添加数据失败，请联系客服: shuidi_tech ；；；错误信息：[${added.status_code}] ${added.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+}
+
+function main(string app_token, string share_link) {
+    // datetime: 表名后缀（W0018-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 表名（对应原 code 152653 的 table_name; 原 2 字段定义省略）
+    let table_name = `W0018-${now.dateTime}`;
+
+    // create_table: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支: 创建失败 → text 617035 → throwError
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败，请联系客服: shuidi_tech ；；；错误信息：[${created.status_code}] ${created.msg}`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // get_notes: 提取小红书图文笔记 → 图集链接数组
+    let note = xhs_note_get.get_notes({
+        "url": share_link
+    });
+
+    // 逐图 OCR + 写入表格（原 batch 182325: concurrentSize=10 → parallel for）
+    parallel for (img_url in note.image_urls, concurrency: 10, on_error: terminate) {
+        add_img_record(app_token, created.data.table_id, img_url);
+    }
+
+    // 构造表格链接（对应 code 111445: app_token 去 query + ?table=table_id）
+    let url = split(app_token, "?")[0] + "?table=" + created.data.table_id;
+
+    return url;
+}

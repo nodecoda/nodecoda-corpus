@@ -1,0 +1,14 @@
+// matting.ncoda — capability header (provider = file name)
+// desc: 抠图
+@language nodecoda/1
+
+type MattingCutoutResult = {
+  any data;
+
+  string mask;
+
+  string msg;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function cutout(any only_mask, any output_mode, string prompt = "", any url) -> MattingCutoutResult {}

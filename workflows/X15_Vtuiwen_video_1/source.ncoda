@@ -1,0 +1,177 @@
+@language nodecoda/1
+// X15 推文批量生成（数量切割分批）→ 每条文案+语音合成 → 写入飞书多维表格
+//
+// 原结构（X15_Vtuiwen_video_1-draft.yaml）:
+//   start(api_key, app_token, content, count, voice_id)
+//     → datetime(158963) → dateTime
+//     → code(152653: table_name=`W0017-${dateTime}` + fields[文案/音频])
+//     → create_table(160311: app_token, name) → code, data.table_id
+//     → condition(198633): code == 0 ?
+//         false → text(617035) → throwError(186296)
+//         true → code(190111: 数字切割 count → [20×n, rem] 分批数组)
+//             → batch(150764: batchSize=200, concurrentSize=10, input=分批数组)
+//                 内层: text(142175 提示词模板) → llm(160133 gpt-4o 生成提示词 JSON)
+//                       → llm_3(147954 gpt-4o-mini JSON 修复) → code(197878 JSON.parse → array<string>)
+//             → code(184011: 扁平化所有批次的提示词列表)
+//             → batch(157941: batchSize=count, concurrentSize=10, input=提示词列表)
+//                 内层: text(1338335 角色模板) → llm_1(1545374 claude-3-7-sonnet 生成正文)
+//                       → speech_synthesis(122241: text, voice_id) → data.link
+//                       → variable_merge(1980325: audio=data.link, text=llm输出)
+//                       → code(289556: records 构造 {文案, 音频})
+//                       → add_records(105492) → condition(755643): code==0 ?
+//                           false → text(728616) → throwError(178163)
+//             → code(111445: app_token 去 query + ?table=table_id) → end
+//
+// 重写说明:
+//   - 两层 batch(concurrentSize=10) 并行 → parallel for（batch 容器语义对齐；
+//     batchSize 真实为 150764=200 / 157941=ref count，渲染器统一 100——分批粒度差异不影响结果集）
+//   - 190111 数字切割 → 声明式 concat/repeat/div（G16，切 [20×n, rem]）
+//   - 184011 扁平化 → 声明式 flatten（array<array<string>> → array<string>，G15）
+//   - 157941 内层 → helper 函数 gen_tweet_and_add（风格提示词→claude 正文→TTS→写表格）
+//   - 152653 的 fields 定义省略（同 X3 族）；create_table 仅表名
+//   - 111445 url 拼接用 foreign code 复刻
+
+@mode workflow
+
+// gen_tweet_and_add: 单条推文 → 文案 + 音频 → 写表格（对应 batch 157941 内层 1338335→1545374→122241→1980325→289556→105492→755643）
+import "coze-biz.datetime";
+import "coze-biz.feishu_bitable";
+import "coze-biz.throw_error";
+import "coze-biz.tts";
+import "coze-biz.wujie";
+function gen_tweet_and_add(string api_key, string app_token, string table_id, string content, string voice_id, string prompt) {
+    // text 1338335: 角色模板（{{String1}} = 风格提示词 prompt）
+    let sys = `# 角色
+根据风格生成用户所需内容
+
+## 风格
+${prompt}
+
+## 输出格式
+- 不需要标题，直接输出正文
+
+## 限制
+- 输出时使用纯文本，不要使用markdown
+- 长度100字左右
+- 如果用户输入的数据不包含具体参数数据，那么输出时也不要带有具体的数据。`;
+
+    // llm_1 1545374: claude-3-7-sonnet 生成正文（user=content, system=角色模板）
+    let llm = wujie.wujie({
+        "api_key": api_key,
+        "model": "claude-3-7-sonnet-20250219",
+        "system_prompt": sys,
+        "user_prompt": content
+    });
+
+    // speech_synthesis 122241: 文案 → 音频（voice_id 用户指定音色）
+    let audio = tts.speech_synthesis({
+        "text": llm.output_value,
+        "voice_id": voice_id
+    });
+
+    // code 289556: records 构造（{文案: text, 音频: data.link} → fields JSON）
+    let record = { "文案": llm.output_value, "音频": audio.data.link };
+    let payload = json.stringify(record);
+    let rec = [ { "fields": payload } ];
+
+    // add_records 105492: 逐条追加（原 variable_merge 1980325 语义并入 rec 构造）
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": rec,
+        "table_id": table_id
+    });
+
+    // 失败分支 755643: 添加失败 → text 728616 → throwError 178163
+    if (added.status_code != 0) {
+        // G13: int() 数值转换 — 错误消息模板声明式化（原 int(status) 截断浮点状态码）
+        let err = `多维表格数据表中添加数据失败，请联系客服: shuidi_tech ；；；错误信息：[${int(added.status_code)}] ${added.msg}`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+}
+
+function main(string api_key, string app_token, string content, string count, string voice_id) {
+    // datetime 158963: 表名后缀（W0017-<dateTime>）
+    let now = datetime.datetime({});
+
+    // table_name（对应原 code 152653; 原 fields 定义省略）
+    let table_name = `W0017-${now.dateTime}`;
+
+    // create_table 160311: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支 198633: 创建失败 → text 617035 → throwError 186296
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败，请联系客服: shuidi_tech ；；；错误信息：[${int(created.status_code)}] ${created.msg}`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // code 190111: 数字切割 count → [20×n, rem]（避免大模型 token 不够，分批生成）
+    // → 声明式 concat(repeat(20, div(n, 20)), [n % 20])（G16：整除/数组重复/拼接）
+    let chunks = concat(repeat(20, div(int(count), 20)), [int(count) % 20]);
+
+    // batch 150764 → parallel for: 每块生成 n 条推文提示词（gpt-4o 生成 + gpt-4o-mini JSON 修复 + 解析）
+    let prompt_groups = parallel for (n in chunks, concurrency: 10, on_error: terminate) {
+        // text 142175: 提示词生成模板（{{String1}}=content, {{String2}}=n）
+        let sys = `# 角色
+你是一位提示词生成专家，现在需要你根据用户的输入${content}批量生成推文提示词
+
+## 技能
+### 技能一
+输出数量必须严格等于${n}的一句话提示词，这些提示词要与用户的输入${content}相关。
+
+## 参考输出
+[
+  "提示词1",
+  "提示词2"
+]
+
+## 限制
+- 仅输出提示词，其它无关的内容一律不要。
+- 提示词必须与用户的输入${content}相关。
+- 提示词必须简短，不能超过60个汉字。
+- 输出的提示词数量必须精确等于${n}个，不得多也不得少。
+- 输出的提示词数量必须精确等于${n}个，不得多也不得少。
+- 输出的提示词数量必须精确等于${n}个，不得多也不得少。`;
+
+        // llm 160133: gpt-4o 生成提示词列表（JSON 文本）
+        let gen = wujie.wujie({
+            "api_key": api_key,
+            "model": "gpt-4o",
+            "user_prompt": sys
+        });
+
+        // llm_3 147954: gpt-4o-mini 修复 JSON 语法
+        let fixed = wujie.wujie({
+            "api_key": api_key,
+            "model": "gpt-4o-mini",
+            "user_prompt": gen.output_value,
+            "system_prompt": "检查用户输入是否符合标准JSON格式。若不符合，仅修正JSON语法和格式错误后直接返回修正后的JSON。若已是有效JSON，则直接返回原JSON。不添加任何说明、注释或其他非JSON内容。"
+        });
+
+        // json.parse<array<string>>: LLM JSON 数组 → array<string>（原生 type-59；
+        // 解析失败 = 节点错误；原 try/except 空列表兜底在原生节点上不可表达，记录 P3）
+        let prompts = json.parse<array<string>>(fixed.output_value);
+
+        // 每块产出该批的提示词列表（循环输出 = array<array<string>>）
+        yield prompts;
+    };
+
+    // code 184011: 扁平化所有批次的提示词 → array<string>
+    // → 声明式 flatten(prompt_groups)（G15）
+    let prompts = flatten(prompt_groups);
+
+    // batch 157941 → parallel for: 逐条生成文案 + 音频并写表
+    parallel for (prompt in prompts, concurrency: 10, on_error: terminate) {
+        gen_tweet_and_add(api_key, app_token, created.data.table_id, content, voice_id, prompt);
+    }
+
+    // code 111445: 构造表格链接（app_token 去 query + ?table=table_id）
+    let url = split(app_token, "?")[0] + "?table=" + created.data.table_id;
+
+    return url;
+}

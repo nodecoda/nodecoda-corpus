@@ -1,0 +1,10 @@
+// wujie.ncoda — capability header (provider = file name)
+// desc: 全球大模型
+@language nodecoda/1
+
+type WujieWujieResult = {
+  string output_value;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function wujie(any api_key, any model, any system_prompt = null, any user_prompt) -> WujieWujieResult {}

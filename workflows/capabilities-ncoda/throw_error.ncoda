@@ -1,0 +1,12 @@
+// throw_error.ncoda — capability header (provider = file name)
+// desc: 抛出错误
+@language nodecoda/1
+
+type ThrowErrorThrowErrorResult = {
+  string error_message;
+
+  string prompt;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function throw_error(array<string> error_message = []) -> ThrowErrorThrowErrorResult {}

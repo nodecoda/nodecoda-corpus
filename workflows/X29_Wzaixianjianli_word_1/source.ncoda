@@ -1,0 +1,60 @@
+@language nodecoda/1
+// X29 大模型生成 HTML 简历 → 发布网页 + 生成图片（X27 变体：无链接读取）
+//
+// 原结构（X29_Wzaixianjianli_word_1-draft.yaml）:
+//   start(prompt)
+//     → llm(DeepSeek-V3-0324, temp=0.8, maxTokens=16384,
+//           prompt="根据以下信息生成...简历HTML...\n{{input}}")
+//     → code(112767, input=llm.html, output=html)
+//     → html2url(上传html, html=code.html) → url     （分支1）
+//     → gen_img(html2img, html=code.html) → image_url（分支2）
+//     → end(image_url, url)
+//
+// 重写说明:
+//   - llm 的 input = start.prompt
+//   - code 112767 为模板清理（导出无实质代码）→ strip 等价
+//   - 双分支并行 → 表达式级 parallel；end 返回两个值 → 命名 record
+
+@mode workflow
+
+import "coze-biz.html2img";
+import "coze-biz.html_upload";
+type X29Result = {
+  string url;
+  string image_url;
+};
+
+function main(string prompt) -> X29Result {
+    // 大模型生成 HTML 简历（原 llm 节点）
+    let html = llm("DeepSeek-V3-0324", {
+        "temperature": 0.8,
+        "max_tokens": 16384,
+        "timeout_ms": 600000,
+        "messages": [ {
+            "role": "user",
+            "content": "根据以下信息生成一份专业的HTML简历。请直接返回完整的HTML文件内容，不要包含markdown代码块或任何其他格式：\n" + prompt
+        } ]
+    });
+
+    // 进度提示（原 output 134703：简历制作完成）
+    output("简历制作完成，开始上传，稍等片刻。");
+
+    // HTML 清理（原 code 112767）
+    let cleaned = trim(html.text);
+
+    // 并行发布（v4：parallel 纯控制流语句，分支变量透明透出）
+    parallel {
+        u: {
+            let p = html_upload.html2url({
+                "html": cleaned
+            });
+        }
+        i: {
+            let g = html2img.gen_img({
+                "html": cleaned
+            });
+        }
+    };
+
+    return { "url": p.url, "image_url": g.image_url };
+}

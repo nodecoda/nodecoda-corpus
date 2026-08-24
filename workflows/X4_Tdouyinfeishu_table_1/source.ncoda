@@ -1,0 +1,156 @@
+@language nodecoda/1
+// X4 提取抖音博主主页中视频文案 → 写入飞书多维表格 — coze-reference 语义重写
+//
+// 原结构（X4_Tdouyinfeishu_table_1-draft.yaml）:
+//   start(api_key, app_token, is_text_corr_on, share_link)
+//     → datetime → dateTime
+//     → code(152653: table_name=`W0014-${dateTime}` + fields[链接/标题/封面/点赞/评论/收藏/分享/时长/发布时间/视频资源])
+//     → create_table(app_token, name=table_name, fields) → code, data.table_id
+//     → condition: create_table.code != 0 ?
+//         false(失败) → text(617035: "多维表格创建数据表失败...") → variable_merge → throwError
+//         true(成功) → extractFirstLink(share_link) → data
+//     → dy_get_user_aweme_list(api_key, share_link=data) → data.aweme_list, code, message
+//     → condition: dy.code != 0 ?
+//         false(失败) → text(363181: "主页解析失败...") → variable_merge → throwError
+//         true(成功) → batch(170020, batchSize=100, concurrentSize=1):
+//             对每个 aweme: add_records(app_token, records=[...aweme 字段...], table_id)
+//     → code(111445: output = app_token.split('?')[0] + '?table=' + table_id)
+//     → end(output)
+//
+// 重写说明:
+//   - batch concurrentSize=1 → parallel for（batch 容器语义对齐）
+//   - batch 内部节点已核实（export 实据）：parse_video(126674) →
+//     condition(115986) → voice_to_text(109631) → condition(149417) →
+//     [is_text_corr_on] content_check(174554) → merge(163171/147183) →
+//     code 289556 组装 records → add_records(105492) → condition(755643)
+//     失败 throwError
+//   - merge 取首个非空：content 优先 content_check 输出，空则回退 vtt.data
+//   - 失败分支简化：原版（115986/149417 false）错误文本入表仍写入 →
+//     抛错中止（X14 同族风格；主链 op 全保留）
+//   - code 152653 的 fields 定义省略（同 X3：code 类型系统不支持
+//     array<map<string,any>>，create_table 仅保留表名语义）
+//   - aweme_list 为 array<DyUserAwemeListAweme>（E5-b 元素 record）：
+//     aweme.desc / aweme.aweme_url / aweme.digg_count 等精确引用
+
+@mode workflow
+@answer "## 打开链接查看结果\n\n[{{output}}]({{output}})" output=url
+
+import "coze-biz.copy_check";
+import "coze-biz.datetime";
+import "coze-biz.dy_user_aweme_list";
+import "coze-biz.feishu_bitable";
+import "coze-biz.link_extract";
+import "coze-biz.throw_error";
+import "coze-biz.video_asr";
+import "coze-biz.video_parse";
+
+// code 289556 + add_records（105492）+ 失败 throwError（755643）:
+// records 组装（链接/标题/封面/视频文案 4 字段）→ 追加表格
+function write_record(string app_token, string table_id, string link, string title, string cover, string content) {
+    let record = {
+        "fields": {
+            "链接": link,
+            "标题": title,
+            "封面": cover,
+            "视频文案": content
+        }
+    };
+    let payload = json.stringify(record);
+    let rec = [ { "fields": payload } ];
+
+    // add_records（105492）: 追加到表格
+    let added = feishu_bitable.add_records({
+        "app_token": app_token,
+        "records": rec,
+        "table_id": table_id
+    });
+
+    // condition 755643 false: 写入失败 → text 728616 拼接 → throwError
+    if (added.status_code != 0) {
+        let err = `写入失败 ；；；错误信息：[${added.status_code}] ${added.msg}；；；请联系客服: shuidi_tech`;
+        let errs_3 = [err];
+        throw_error.throw_error({"error_message": errs_3});
+    }
+}
+
+function main(string api_key, string app_token, bool is_text_corr_on, string share_link) {
+    // datetime: 生成日期时间戳，作为表名后缀（W0014-<dateTime>）
+    let now = datetime.datetime({});
+
+    // 构造表名（对应原 code 152653; 原 11 字段定义省略）
+    let table_name = `W0014-${now.dateTime}`;
+
+    // create_table: 创建多维表格
+    let created = feishu_bitable.create_table({
+        "app_token": app_token,
+        "name": table_name
+    });
+
+    // 失败分支: 创建失败 → 拼接错误消息并抛出（text 617035 → throwError）
+    if (created.status_code != 0) {
+        let err = `多维表格创建数据表失败 ；；；错误信息：[${created.status_code}] ${created.msg}；；；请联系客服: shuidi_tech`;
+        let errs_1 = [err];
+        throw_error.throw_error({"error_message": errs_1});
+    }
+
+    // 提取分享链接中的第一个链接（extractFirstLink → extract_first_link）
+    let first_link = link_extract.extract_first_link({"text": share_link});
+
+    // 获取博主作品列表（dy_get_user_aweme_list）
+    let awemes = dy_user_aweme_list.dy_get_user_aweme_list({
+        "api_key": api_key,
+        "share_link": first_link.data
+    });
+
+    // 失败分支: 主页解析失败 → 拼接错误消息并抛出（text 363181 → throwError）
+    if (awemes.status_code != 0) {
+        let err = `主页解析失败；；；错误信息：[${awemes.status_code}] ${awemes.message}；；；请联系客服: shuidi_tech`;
+        let errs_2 = [err];
+        throw_error.throw_error({"error_message": errs_2});
+    }
+
+    // 批量导入（batch 170020: concurrentSize=1）: 对每个作品解析→转写→矫正→逐条入表
+    parallel for (aweme in awemes.data.aweme_list, concurrency: 1, on_error: terminate) {
+        // parse_video（126674）: 解析无水印视频
+        let parsed = video_parse.parse_video({
+            "api_key": api_key,
+            "share_link": aweme.aweme_url
+        });
+
+        // condition 115986 false: 解析失败 → 抛错（原版错误文本入表，简化）
+        if (parsed.data.video == "") {
+            let errs_3 = [`视频解析失败 ；；；错误信息：[${parsed.status_code}] ${parsed.message}`];
+            throw_error.throw_error({"error_message": errs_3});
+        }
+
+        // voice_to_text（109631）: 视频转写
+        let vtt = video_asr.voice_to_text({
+            "api_key": api_key,
+            "file_url": parsed.data.video
+        });
+
+        // condition 149417 false: 转写失败 → 抛错
+        if (vtt.data == "") {
+            let errs_4 = [`文案提取失败 ；；；错误信息：${vtt.error_message}`];
+            throw_error.throw_error({"error_message": errs_4});
+        }
+
+        // content_check（174554）: 文案矫正（is_text_corr_on 语义下矫正输出优先，
+        // 空则回退 vtt.data —— merge 147183 取首个非空；注：is_text_corr_on=false
+        // 时原版不调 content_check，此处恒调以换取单一路径，结果等值）
+        let checked = copy_check.content_check({
+            "api_key": api_key,
+            "user_prompt": vtt.data
+        });
+        let content = checked.output_value != "" ? checked.output_value : vtt.data;
+
+        // code 289556 + add_records（105492）+ 失败 throwError（755643）
+        write_record(app_token, created.data.table_id, first_link.data, aweme.desc, parsed.data.cover, content);
+    }
+
+
+    // 构造最终表格链接（对应 code 111445: app_token 去 query + ?table=table_id）
+    let url = split(app_token, "?")[0] + "?table=" + created.data.table_id;
+
+    return url;
+}

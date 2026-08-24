@@ -1,0 +1,15 @@
+// image_generate.ncoda — capability header (provider = file name)
+// desc: 图像生成（coze-biz 内置节点;prompt + 模型设置,输出 image）
+// P1 内置节点通道: 绑定表 node_type=image_generate。prompt → 端口 output
+// + parameters.prompt 模板;model_setting（map）→ modelSetting 透传
+// （model / custom_ratio / ddim_steps / ratio / images_reference）。
+@language nodecoda/1
+
+type ImageGenerateResult = {
+  file data;
+
+  string msg;
+};
+
+@capability failure_branch=true, timeout_ms=600000
+function generate(string prompt, map<string, any> model_setting) -> ImageGenerateResult {}

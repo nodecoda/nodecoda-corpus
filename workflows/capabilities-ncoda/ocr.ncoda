@@ -1,0 +1,38 @@
+// ocr.ncoda — capability header (provider = file name)
+// desc: OCR
+@language nodecoda/1
+
+type OcrImage2TextWordsItem = {
+  string text;
+};
+
+type OcrImage2TextResultsItem = {
+  array<OcrImage2TextWordsItem> words;
+};
+
+type OcrImage2TextResult = {
+  OcrImage2TextData data;
+
+  OcrImage2TextErrorbody errorBody;
+
+  bool isSuccess;
+
+  string log_id;
+
+  string msg;
+
+  float status_code;
+};
+
+type OcrImage2TextData = {
+  array<OcrImage2TextResultsItem> results;
+};
+
+type OcrImage2TextErrorbody = {
+  string errorCode;
+
+  string errorMessage;
+};
+
+@capability timeout_ms=180000
+function image_2_text(string url) -> OcrImage2TextResult {}

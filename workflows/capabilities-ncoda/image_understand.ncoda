@@ -1,0 +1,18 @@
+// image_understand.ncoda — capability header (provider = file name)
+// desc: 图片理解
+@language nodecoda/1
+
+type ImageUnderstandImgUnderstandResult = {
+  int content_type;
+
+  string msg;
+
+  string response_for_model;
+
+  float status_code;
+
+  int type_for_model;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function img_understand(any text, any url) -> ImageUnderstandImgUnderstandResult {}

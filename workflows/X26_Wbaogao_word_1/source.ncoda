@@ -1,0 +1,50 @@
+@language nodecoda/1
+// X26 读取表格文件 → 大模型生成报表 → 发布为网页 — coze-reference 语义重写
+//
+// 原结构（X26_Wbaogao_word_1-draft.yaml）:
+//   start(file, prompt)
+//     → read(文件读取, url=file) → data
+//     → llm(DeepSeek-V3-0324, temp=0.8, maxTokens=16384,
+//           prompt="重点要求：{{prompt}}\n数据：\n{{input}}")
+//     → html2url(发布网页, html=llm.output) → url
+//     → end(output=url)
+//   132029/142912 为 output 标注节点（无逻辑），省略
+//
+// 重写说明:
+//   - llm 的 input 变量 = read 输出（文件内容文本）
+//   - llm 文本输出用 .text（标准输出字段）
+
+@mode workflow
+
+import "coze-biz.file_read";
+import "coze-biz.html_upload";
+function main(string file_url = "", string prompt = "") -> string {
+    // 读取文件内容（原 read 节点）
+    let content = file_read.read({
+        "url": file_url
+    });
+
+    // 进度提示（原 output 132029：读取表格数据）
+    output("表格数据读取完成，报告生成需要1-3分钟，请耐心等待。");
+
+    // 大模型生成报表（原 llm 节点）
+    let report = llm("DeepSeek-V3-0324", {
+        "temperature": 0.8,
+        "max_tokens": 16384,
+        "timeout_ms": 600000,
+        "messages": [ {
+            "role": "user",
+            "content": "重点要求：" + prompt + "\n数据：\n" + content.data
+        } ]
+    });
+
+    // 进度提示（原 output 142912：开始生成报表）
+    output("报告生成完毕，正在上传。");
+
+    // 发布为网页（原 html2url 节点）
+    let page = html_upload.html2url({
+        "html": report.text
+    });
+
+    return page.url;
+}

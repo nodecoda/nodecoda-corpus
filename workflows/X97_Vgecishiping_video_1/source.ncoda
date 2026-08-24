@@ -1,0 +1,359 @@
+@language nodecoda/1
+// X97 一键生成歌词视频（网易云歌曲搜索 → 歌词清洗/切分 → 剪映草稿编排）
+//
+// 原结构（X97_Vgecishiping_video_1-draft.yaml）:
+//   start(name, singer, audio, background_img)
+//     → http(137829 POST mp3.ltyuanfang.cn form: input=name+singer) → body
+//     → code(136008 JSON.parse → key0{author,lrc,pic,title,url})
+//     → llm(180192 清洗 lrc 纯时间行) → llm(133578 切分 text/timelines)
+//     → code(109910 前奏时间线) — 死节点（输出未被消费）省略
+//     → http(137721/142249 GET baidu.com) — 死节点省略
+//     → condition(134669): audio 非空?
+//         true → str_to_list(190219: start.audio) / false → str_to_list(196964: parsed.data[0].url)
+//         → variable_merge(160591 Group1)
+//     → audio_timelines(124048: links=Group1) → all_timelines
+//     → audio_infos(187024: mp3_urls=Group1, timelines=all_timelines) → infos
+//     → str_to_list(124098: parsed.data[0].author) → caption_infos(116963 歌手)
+//     → text(143085 《{{title}}》) → str_to_list(191693) → caption_infos(149831 歌名)
+//     → str_to_list(196428: parsed.data[0].pic) → imgs_infos(122800 封面)
+//     → condition(153641): background_img 非空?
+//         true → str_to_list(139945: start.background_img) / false → str_to_list(137980 默认)
+//         → variable_merge(116037 Group1) → imgs_infos(134713 背景)
+//     → str_to_list(169750 白底) → imgs_infos(190328 白底)
+//     → str_to_list(115059 泡泡变焦) → effect_infos(126534)
+//     → code(197632 最后一句 end 对齐) — 死节点（输出未被消费）省略
+//     → caption_infos(187397 歌词: texts=133578.text, timelines=133578.timelines)
+//     → create_draft(105281 1920x1080) → draft_url
+//     → add_images(169177 背景 alpha=0.5 scale=1.21)
+//     → add_images(143945 唱片 scale=0.38 tx=-1039 ty=108)
+//     → add_masks(156432 圆形 segment_ids=143945)
+//     → keyframes_infos(116642 KFTypePositionX) → add_keyframes(177443)
+//     → keyframes_infos(165776 KFTypeRotation) → add_keyframes(101543)
+//     → add_images(118016 白底 scale=0.32) → add_images(163364 封面 scale=0.3)
+//     → add_captions(130957 歌词) → add_captions(173459 歌名) → add_captions(101473 歌手)
+//     → add_sticker(191376) → add_sticker(176672)
+//     → add_effects(172024) → add_audios(198745) → save_draft(165301) → end(draft_url)
+//
+// 重写说明:
+//   - 两个 http 死节点（GET baidu.com）、109910/197632 死代码节点省略
+//   - http 137829 的 14 个请求头原样保留（表单 content-type + 浏览器模拟头）
+//   - condition + variable_merge → ncoda if/else 表达式直接赋值
+//   - 136008 JSON.parse → foreign code
+//   - llm(180192/133578 豆包·1.5·Pro·32k) 保持
+//   - 133578 输出 text/timelines 两个结构化端口 → llm 调用直接取字段
+
+@mode workflow
+
+// 歌词切分结果（133578 llm 的 text/timelines 结构化输出）
+import "coze-biz.capcut_data";
+import "coze-biz.capcut_video_compose";
+type LyricTimeline = {
+  int start;
+  int end;
+};
+type LyricSplit = {
+  array<string> text;
+  array<LyricTimeline> timelines;
+};
+type Song = {
+  string author;
+  string lrc;
+  string pic;
+  string title;
+  string url;
+};
+type Resp = {
+  array<Song> data;
+};
+
+function main(string name, string singer, string audio, string background_img) {
+    // ── 搜索歌曲（137829 http POST → 136008 JSON.parse）──────────────
+    let resp = http("POST", "https://mp3.ltyuanfang.cn/", {
+        "body": `input=${name}+${singer}&filter=name&type=netease&page=1`,
+        // 浏览器捕获头全部保留：content-type 决定服务端对表单 body 的解析，
+        // accept, accept-language, origin
+        // priority, referer, sec-ch-ua
+        // sec-ch-ua-mobile, sec-ch-ua-platform, sec-fetch-dest
+        // sec-fetch-mode, sec-fetch-site, user-agent
+        // x-requested-with, content-type
+        "headers": {
+            "accept": "application/json, text/javascript, */*; q=0.01",
+            "accept-language": "zh-CN,zh;q=0.9,en;q=0.8,en-GB;q=0.7,en-US;q=0.6",
+            "origin": "https://mp3.ltyuanfang.cn",
+            "priority": "u=1, i",
+            "referer": "https://mp3.ltyuanfang.cn/?name=%E4%BA%88%E4%BD%A0%20%E9%98%9F%E9%95%BF&type=netease",
+            "sec-ch-ua": "\"Microsoft Edge\";v=\"137\", \"Chromium\";v=\"137\", \"Not/A)Brand\";v=\"24\"",
+            "sec-ch-ua-mobile": "?0",
+            "sec-ch-ua-platform": "\"macOS\"",
+            "sec-fetch-dest": "empty",
+            "sec-fetch-mode": "cors",
+            "sec-fetch-site": "same-origin",
+            "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/137.0.0.0 Safari/537.36",
+            "x-requested-with": "XMLHttpRequest",
+            "content-type": "application/x-www-form-urlencoded; charset=UTF-8"
+        }
+    });
+
+    // code 136008: JSON.parse(body) → data.data[0]（G12-2: json.parse<Resp>
+    // 记录 schema + 数组字段 E5-b item-0 点路径 — key0 字段 = parsed.data[0].X）
+    let parsed = json.parse<Resp>(resp.body);
+
+    // ── 歌词清洗（180192）→ 切分（133578）────────────────────────────
+    let cleaned = llm("豆包·1.5·Pro·32k", {
+        "temperature": 0.3,
+        "max_tokens": 5220,
+        "timeout_ms": 180000,
+        "messages": [
+            { "role": "system", "content": "# 角色\n你是一个专业的数据处理专家，擅长处理歌词和时间相关的数据。当用户提供一段包含歌词和时间内容时，你能够精准地将其中只有时间但是没有歌词的部分去掉。\n\n## 技能\n### 技能 1: 处理歌词和时间数据\n1. 当用户给出一段歌词和时间内容时，仔细分析其中的时间和歌词部分。\n2. 识别出只有时间但是没有歌词的部分。\n3. 将识别出的无歌词时间部分去掉，只保留有歌词对应的时间及歌词内容。\n\n## 限制:\n- 只处理用户提供的歌词和时间相关内容，拒绝回答与该处理任务无关的话题。\n- 输出内容仅为处理后的歌词和对应时间，不能包含其他无关信息。 " },
+            { "role": "user", "content": parsed.data[0].lrc }
+        ]
+    });
+
+    let split = llm("豆包·1.5·Pro·32k", {
+        "temperature": 0.3,
+        "max_tokens": 5059,
+        "timeout_ms": 180000,
+        "messages": [
+            { "role": "system", "content": "# 角色\n你是一位专业且精准的歌词和时间线划分专家，不仅擅长对用户输入的内容进行细致筛选处理，精准提取其中的歌词，并将歌词按照每一句进行划分，同时能把每一句歌词对应的时间处理成特定格式输出。而且要确保在输出结果中，节点输出的值没有时，模型输出的值就有。\n\n## 技能\n### 技能 1: 筛选并划分歌词与时间线\n1. 当用户输入包含歌词及其他可能非歌词的内容和时间后。\n2. 将筛选后的每一句歌词准确划分出来，输出到名为“text”的列表中。\n3. 针对每一句歌词，将其对应的时间处理成{\"start\": time_start, \"end\": time_end}的格式，例如({\"start\":  0, \"end\": 6000000})，输出到名为“timelines”的列表中，time_start和time_end的单位都是微秒。\n4. 特别注意检查输出结果，若节点输出的值不存在，模型输出中要有对应的值。\n\n## 限制:\n- 只处理与歌词筛选、划分和时间线处理相关的内容，拒绝回答无关话题。\n- 输出必须包含“text”和“timelines”两个部分，且数据格式要符合上述要求。 \n- 严格保证节点输出的值没有时，模型输出的值就有。 " },
+            { "role": "user", "content": cleaned.text }
+        ]
+    });
+
+    // ── 音频源：用户上传优先，否则用搜索到的 URL（134669 分支 + 160591 merge）──
+    let audio_src = audio != "" ? audio : parsed.data[0].url;
+    let audio_list = capcut_data.str_to_list({
+        "obj": audio_src
+    });
+
+    // audio_timelines（124048）→ all_timelines
+    let at = capcut_data.audio_timelines({
+        "links": audio_list.infos
+    });
+
+    // audio_infos（187024）→ 音乐素材
+    let audio_infos = capcut_data.audio_infos({
+        "mp3_urls": audio_list.infos,
+        "timelines": at.all_timelines
+    });
+
+    // ── 歌手（124098 → 116963）──────────────────────────────────────
+    let singer_list = capcut_data.str_to_list({
+        "obj": parsed.data[0].author
+    });
+    let singer_infos = capcut_data.caption_infos({
+        "texts": singer_list.infos,
+        "timelines": at.all_timelines
+    });
+
+    // ── 歌名（143085 text 模板 → 191693 → 149831）────────────────────
+    let title_text = "《" + parsed.data[0].title + "》";
+    let title_list = capcut_data.str_to_list({
+        "obj": title_text
+    });
+    let title_infos = capcut_data.caption_infos({
+        "texts": title_list.infos,
+        "timelines": at.all_timelines
+    });
+
+    // ── 封面（196428 → 122800）───────────────────────────────────────
+    let cover_list = capcut_data.str_to_list({
+        "obj": parsed.data[0].pic
+    });
+    let cover_infos = capcut_data.imgs_infos({
+        "imgs": cover_list.infos,
+        "timelines": at.all_timelines,
+        "height": 1080,
+        "width": 1920
+    });
+
+    // ── 背景（153641 分支 + 116037 merge → 134713）────────────────────
+    let bg_src = background_img != "" ? background_img : "https://ve-template-0920.oss-cn-shanghai.aliyuncs.com/uploads/1749389451844_qy59";
+    let bg_list = capcut_data.str_to_list({
+        "obj": bg_src
+    });
+    let bg_infos = capcut_data.imgs_infos({
+        "imgs": bg_list.infos,
+        "timelines": at.all_timelines,
+        "height": 1080,
+        "width": 1920
+    });
+
+    // ── 白底（169750 → 190328）───────────────────────────────────────
+    let white_list = capcut_data.str_to_list({
+        "obj": "https://ve-template-0920.oss-cn-shanghai.aliyuncs.com/uploads/1749621382647_k2iq"
+    });
+    let white_infos = capcut_data.imgs_infos({
+        "imgs": white_list.infos,
+        "timelines": at.all_timelines
+    });
+
+    // ── 特效（115059 → 126534）───────────────────────────────────────
+    let fx_list = capcut_data.str_to_list({
+        "obj": "泡泡变焦"
+    });
+    let fx_infos = capcut_data.effect_infos({
+        "effects": fx_list.infos,
+        "timelines": [ { "start": 0, "end": 2000000 } ]
+    });
+
+    // ── 歌词切分结果解析（133578 双端口 text/timelines → json.parse<LyricSplit>）──
+    let lyric = json.parse<LyricSplit>(split.text);
+
+    // ── 歌词 caption（187397: 用解析出的 text/timelines）──────────────
+    let lyric_infos = capcut_data.caption_infos({
+        "texts": lyric.text,
+        "timelines": lyric.timelines,
+        "in_animation": "渐显",
+        "in_animation_duration": 500000,
+        "out_animation": "渐隐",
+        "out_animation_duration": 500000
+    });
+
+    // ── 创建草稿（105281）────────────────────────────────────────────
+    let draft = capcut_video_compose.create_draft({
+        "height": 1080,
+        "width": 1920
+    });
+
+    // ── 编排：背景 → 唱片 → 蒙版 → 关键帧 → 白底 → 封面 → 字幕 → 贴纸 → 特效 → 音频 ──
+    let d1 = capcut_video_compose.add_images({
+        "draft_url": draft.draft_url,
+        "image_infos": bg_infos.infos,
+        "alpha": 0.5,
+        "scale_x": 1.21,
+        "scale_y": 1.21
+    });
+
+    let d2 = capcut_video_compose.add_images({
+        "draft_url": draft.draft_url,
+        "image_infos": cover_infos.infos,
+        "scale_x": 0.38,
+        "scale_y": 0.38,
+        "transform_x": -1039,
+        "transform_y": 108
+    });
+
+    // 圆形蒙版（156432: 套在唱片图 segment 上）
+    let d3 = capcut_video_compose.add_masks({
+        "draft_url": draft.draft_url,
+        "name": "圆形",
+        "segment_ids": d2.segment_ids,
+        "X": -32,
+        "Y": -8,
+        "height": 540,
+        "width": 899
+    });
+
+    // 唱片平移关键帧（116642 → 177443）
+    let kf1 = capcut_data.keyframes_infos({
+        "ctype": "KFTypePositionX",
+        "offsets": "0|2",
+        "segment_infos": d2.segment_infos,
+        "values": "-1050|-598",
+        "height": 1080,
+        "width": 1920
+    });
+    let d4 = capcut_video_compose.add_keyframes({
+        "draft_url": draft.draft_url,
+        "keyframes": kf1.keyframes_infos
+    });
+
+    // 唱片旋转关键帧（165776 → 101543）
+    let kf2 = capcut_data.keyframes_infos({
+        "ctype": "KFTypeRotation",
+        "offsets": "2|100",
+        "segment_infos": d2.segment_infos,
+        "values": "0|360"
+    });
+    let d5 = capcut_video_compose.add_keyframes({
+        "draft_url": draft.draft_url,
+        "keyframes": kf2.keyframes_infos
+    });
+
+    // 白底（118016）→ 封面（163364）
+    let d6 = capcut_video_compose.add_images({
+        "draft_url": draft.draft_url,
+        "image_infos": white_infos.infos,
+        "scale_x": 0.32,
+        "scale_y": 0.32,
+        "transform_x": -1052,
+        "transform_y": 100
+    });
+    let d7 = capcut_video_compose.add_images({
+        "draft_url": draft.draft_url,
+        "image_infos": cover_infos.infos,
+        "scale_x": 0.3,
+        "scale_y": 0.3,
+        "transform_x": -1050,
+        "transform_y": 100
+    });
+
+    // 字幕：歌词（130957）→ 歌名（173459）→ 歌手（101473）
+    let d8 = capcut_video_compose.add_captions({
+        "draft_url": draft.draft_url,
+        "captions": lyric_infos.infos,
+        "border_color": "#000000",
+        "font": "挥墨体",
+        "font_size": 6,
+        "text_color": "#ffffff",
+        "transform_x": 681,
+        "transform_y": -233
+    });
+    let d9 = capcut_video_compose.add_captions({
+        "draft_url": draft.draft_url,
+        "captions": title_infos.infos,
+        "border_color": "#000000",
+        "font": "挥墨体",
+        "font_size": 10,
+        "text_color": "#ffffff",
+        "transform_x": 668,
+        "transform_y": 415
+    });
+    let d10 = capcut_video_compose.add_captions({
+        "draft_url": draft.draft_url,
+        "captions": singer_infos.infos,
+        "border_color": "#000000",
+        "font": "挥墨体",
+        "font_size": 5,
+        "text_color": "#ffffff",
+        "transform_x": 682,
+        "transform_y": 197
+    });
+
+    // 贴纸（191376 → 176672）
+    let d11 = capcut_video_compose.add_sticker({
+        "draft_url": draft.draft_url,
+        "start": at.all_timelines.start,
+        "end": at.all_timelines.end,
+        "sticker_id": 6895932359351209230,
+        "scale": 0.59,
+        "transform_x": -1044,
+        "transform_y": -619
+    });
+    let d12 = capcut_video_compose.add_sticker({
+        "draft_url": draft.draft_url,
+        "start": at.all_timelines.start,
+        "end": at.all_timelines.end,
+        "sticker_id": 7025950067215453470,
+        "scale": 0.61,
+        "transform_x": -1054,
+        "transform_y": -370
+    });
+
+    // 特效（172024）→ 音频（198745）
+    let d13 = capcut_video_compose.add_effects({
+        "draft_url": draft.draft_url,
+        "effect_infos": fx_infos.infos
+    });
+    let d14 = capcut_video_compose.add_audios({
+        "draft_url": draft.draft_url,
+        "audio_infos": audio_infos.infos
+    });
+
+    // 保存（165301）→ 输出草稿 URL
+    let saved = capcut_video_compose.save_draft({
+        "draft_url": draft.draft_url
+    });
+
+    return saved.draft_url;
+}

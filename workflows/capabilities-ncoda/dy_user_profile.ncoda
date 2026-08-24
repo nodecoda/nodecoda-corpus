@@ -1,0 +1,52 @@
+// dy_user_profile.ncoda — capability header (provider = file name)
+// desc: 获取博主信息
+@language nodecoda/1
+
+type DyUserProfileDyGetUserProfileResult = {
+  DyUserProfileDyGetUserProfileData data;
+
+  DyUserProfileDyGetUserProfileErrorbody errorBody;
+
+  bool isSuccess;
+
+  string message;
+
+  string prompt;
+
+  float status_code;
+};
+
+type DyUserProfileDyGetUserProfileData = {
+  string avatar_url;
+
+  int aweme_count;
+
+  string enterprise_verify_reason;
+
+  int following_count;
+
+  string ip_location;
+
+  int mix_count;
+
+  int mplatform_followers_count;
+
+  string nickname;
+
+  string sec_uid;
+
+  string signature;
+
+  int total_favorited;
+
+  string unique_id;
+};
+
+type DyUserProfileDyGetUserProfileErrorbody = {
+  string errorCode;
+
+  string errorMessage;
+};
+
+@capability timeout_ms=180000
+function dy_get_user_profile(any api_key, any url) -> DyUserProfileDyGetUserProfileResult {}

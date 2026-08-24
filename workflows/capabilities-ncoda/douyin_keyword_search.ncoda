@@ -1,0 +1,34 @@
+// douyin_keyword_search.ncoda — capability header (provider = file name)
+// desc: 抖音关键词检索
+@language nodecoda/1
+
+type DouyinKeywordSearchResultItem = {
+  string author;
+
+  float comment_count;
+
+  string cover_url;
+
+  string create_time;
+
+  string desc;
+
+  float like_count;
+
+  string play_url;
+
+  float share_count;
+
+  string share_url;
+
+  string video_id;
+};
+
+type DouyinKeywordSearchDouyinKeywordResult = {
+  string note;
+
+  array<DouyinKeywordSearchResultItem> result;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function douyin_keyword(any api_key, any cookie, any keyword, any publish_time, any sort_type) -> DouyinKeywordSearchDouyinKeywordResult {}

@@ -1,0 +1,34 @@
+// datetime.ncoda — capability header (provider = file name)
+// desc: 日期时间
+@language nodecoda/1
+
+type DatetimeDatetimeResult = {
+  float date;
+
+  string dateOnly;
+
+  string dateTime;
+
+  string filenameFriendly;
+
+  float hour;
+
+  float millisecond;
+
+  float minute;
+
+  float month;
+
+  string prompt;
+
+  float second;
+
+  string timeOnly;
+
+  int timestamp;
+
+  float year;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function datetime(string datetime = "") -> DatetimeDatetimeResult {}

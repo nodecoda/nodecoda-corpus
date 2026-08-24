@@ -1,0 +1,30 @@
+// video_compose_toolkit.ncoda — capability header (provider = file name)
+// desc: 视频合成工具箱
+@language nodecoda/1
+
+type VideoComposeToolkitImgAudioVideoResult = {
+  float duration;
+
+  string message;
+
+  string out_url;
+
+  string tip_url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function img_audio_video(any api_token, any img_url, any mp3_url) -> VideoComposeToolkitImgAudioVideoResult {}
+type VideoComposeToolkitVideoMergingResult = {
+  float duration;
+
+  string error;
+
+  string message;
+
+  string out_url;
+
+  string tip_url;
+};
+
+@capability failure_branch=true, timeout_ms=180000
+function video_merging(any api_token, any video_urls) -> VideoComposeToolkitVideoMergingResult {}

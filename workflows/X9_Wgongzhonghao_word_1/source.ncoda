@@ -1,0 +1,186 @@
+@language nodecoda/1
+// X9 公众号自动发文基础版：热搜 → 随机新闻 → LLM 标题/图片/正文 → 发布
+//
+// 原结构（X9_Wgongzhonghao_word_1-draft.yaml）:
+//   start(appid, appsecret)
+//     → hot_list(113460) → data
+//     → code(163013: 随机获取一条知乎新闻) → title, url
+//     → 并行（163013 之后分叉）:
+//         r1: llm(115728: 标题转图片描述, input=title) → text2image(149343: prompt) → data.images.image_url
+//         r2: llm(111278: 公众号爆款标题, input=title) → output
+//         r3: LinkReaderPlugin(179838: url) → data.content
+//             → llm(126394: 生成公众号内容, q=data.content) → code(199212: \n→<br/>) → content
+//         r4: get_access_token(149295: appid, appsecret) → access_token
+//     → add_material(175921: access_token, image_url) → media_id
+//     → add_draft(159694: access_token, content, thumb_media_id, title) → media_id
+//     → publish_article(104044: access_token, media_id) → errmsg
+//     → end(output=errmsg)
+//
+// 重写说明:
+//   - 3 路 llm 原生节点 + link_reader + get_access_token 并行 → 语句级 parallel（透明屏障）
+//   - code 163013（map/flat/filter/随机选一条）用 foreign code 复刻，
+//     输入 array<HotlistAggregateHotListGroup>（嵌套 record，E5-b），结构化输出 {title, url}
+//   - code 199212（换行转 <br/>）→ 声明式 replace(article.text, "\n", "<br/>")（G15）
+//   - text2image 的 image_url 经 E5-b 元素访问 data.images[0].image_url
+//   - 保留原流程：先取 token，再上传图片素材，然后存草稿，最后发布
+
+@mode workflow
+
+import "coze-biz.byteartist";
+import "coze-biz.hotlist_aggregate";
+import "coze-biz.link_reader";
+import "coze-biz.wechat_mp";
+const IMAGE_DESC_SYSTEM = `# 角色
+你是一个专业的文本转图片描述提示词生成助手，能够精准理解输入内容，并将其转化为高质量的图片描述提示词。
+
+## 技能
+### 技能 1: 生成图片描述提示词
+1. 仔细分析用户输入的内容，包括主题、细节、风格等关键信息。
+2. 根据输入内容的特点，生成符合要求的图片描述提示词。
+3. 生成的提示词要清晰、准确，能够引导图片生成工具生成与输入内容相符的图片。
+
+## 限制:
+- 只围绕将输入转化为图片描述提示词展开，拒绝回答与该任务无关的话题。
+- 所输出的内容应简洁明了，符合图片描述提示词的要求。 `;
+
+const TITLE_SYSTEM = `# 角色
+你是一位超厉害的微信公众号爆款标题制造大师，凭借深厚的文字功底和敏锐的热点洞察力，总能针对给定标题，打造出极具吸引力、满是微信公众号风格魅力且能瞬间抓住读者眼球的全新标题。
+
+## 技能
+### 技能 1: 生成微信公众号标题
+1. 当用户给出一个标题时，深入剖析该标题的主题、核心要点，精准提炼关键信息。
+2. 紧密结合微信公众号文章标题吸睛、激趣、引发共鸣的特点，融入当下热点元素或大众关心话题，创作出一个全新的微信公众号标题。
+
+## 限制:
+- 仅围绕生成微信公众号标题这一任务进行回复，坚决拒绝回答无关话题。
+- 回复内容必须简洁明了，直接给出新生成的微信公众号标题。 `;
+
+const ARTICLE_SYSTEM = `# 角色
+你是一个微信公众号文案创作小能手，擅长将输入的内容巧妙转化为风格鲜明、吸引人的微信公众号文案，能精准把握微信公众号平台的语言特色和文案风格。
+
+## 技能
+### 技能 1: 内容转化
+1. 接收用户输入的内容后，分析内容核心要点。
+2. 依据微信公众号文案风格，运用恰当的表达方式、生动的语句等，将内容转化为一篇符合微信公众号调性的文案。
+3. 返回的内容如果有知乎相关的文字自动识别去掉，同时保证文章的通顺。
+4. 不加主动添加，例如插入图片等相关提示的内容。
+## 限制:
+- 只专注于将输入内容转化为微信公众号文案，不回答与该转化无关的问题。
+- 所输出的文案需符合微信公众号文案风格，语言表达清晰且有吸引力。
+- 需围绕输入内容进行转化，不得偏离核心要点。 `;
+
+function main(string appid, string appsecret) {
+    // hot_list: 获取热搜榜数据（原 113460）
+    let hot = hotlist_aggregate.hot_list({});
+
+    // code 163013: 从热搜条目中随机取一条知乎新闻（map/flat/filter → random）
+    let picked = foreign code python3(array<HotlistAggregateHotListGroup> groups = hot.data) -> {
+        title: string; url: string;
+    } {
+        source `import random
+
+def main(groups: list) -> dict:
+    arr = []
+    for g in groups:
+        arr.extend(g.get("data") or [])
+    arr = [it for it in arr
+           if it.get("title") and it.get("url")
+           and (("weibo" not in it["url"]) or ("b23.tv" not in it["url"]))]
+    if not arr:
+        return {"title": "", "url": ""}
+    it = random.choice(arr)
+    return {"title": it["title"], "url": it["url"]}`;
+    };
+
+    // 四路并行（对应原 163013 之后的分叉；v4：纯控制流语句，分支变量透明透出）
+    parallel {
+        r1: {
+            // LLM: 标题 → 图片描述提示词（原 115728）
+            let desc = llm("豆包·工具调用", {
+                "temperature": 1,
+                "top_p": 0.7,
+                "max_tokens": 1024,
+                "timeout_ms": 600000,
+                "messages": [
+                    { "role": "system", "content": IMAGE_DESC_SYSTEM },
+                    { "role": "user", "content": picked.title }
+                ]
+            });
+
+            // text2image: 生成封面图（原 149343）
+            let img = byteartist.text2image({
+                "prompt": desc.text
+            });
+
+            // 取第一张图 URL（E5-b 元素访问）
+
+        }
+        r2: {
+            // LLM: 公众号爆款标题（原 111278）
+            let title = llm("豆包·工具调用", {
+                "temperature": 1,
+                "top_p": 0.7,
+                "max_tokens": 1024,
+                "timeout_ms": 600000,
+                "messages": [
+                    { "role": "system", "content": TITLE_SYSTEM },
+                    { "role": "user", "content": picked.title }
+                ]
+            });
+
+        }
+        r3: {
+            // 抓取新闻正文（原 179838）
+            let page = link_reader.link_reader_plugin({
+                "url": picked.url
+            });
+
+            // LLM: 生成公众号文案（原 126394, q=data.content）
+            let article = llm("豆包·工具调用", {
+                "temperature": 1,
+                "top_p": 0.7,
+                "max_tokens": 1024,
+                "timeout_ms": 600000,
+                "messages": [
+                    { "role": "system", "content": ARTICLE_SYSTEM },
+                    { "role": "user", "content": page.data.content }
+                ]
+            });
+
+            // code 199212: 换行 → <br/>（微信公众号正文格式）
+            let content = replace(article.text, "\n", "<br/>");
+
+        }
+        r4: {
+            // get_access_token（原 149295）
+            let tok = wechat_mp.get_access_token({
+                "appid": appid,
+                "appsecret": appsecret
+            });
+
+        }
+    };
+
+    // add_material: 上传封面图到公众号素材库（原 175921）
+    let material = wechat_mp.add_material({
+        "access_token": tok.access_token,
+        "image_url": img.data.images[0].image_url
+    });
+
+    // add_draft: 保存草稿（原 159694）
+    let draft = wechat_mp.add_draft({
+        "access_token": tok.access_token,
+        "content": content,
+        "thumb_media_id": material.media_id,
+        "title": title.text
+    });
+
+    // publish_article: 发布（原 104044）
+    let published = wechat_mp.publish_article({
+        "access_token": tok.access_token,
+        "media_id": draft.media_id
+    });
+
+    // end: 返回发布结果 errmsg
+    return published.errmsg;
+}
